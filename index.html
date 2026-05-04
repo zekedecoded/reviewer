@@ -237,7 +237,7 @@
   <header>
     <div class="badge">IT-IAS02 · Quick Reference</div>
     <h1>IT Security <span>Review</span></h1>
-    <p>// Operating Systems · Network Scanning · Attacks · Redundancy · InfoSec Fundamentals</p>
+    <p>// CIA Triad · OS Utilities · Network Scanning · Attacks · Redundancy · Wireless Security</p>
   </header>
 
   <!-- ===== SECTION 1: OS UTILITIES ===== -->
@@ -381,6 +381,48 @@
       <span class="section-title">Information Security Fundamentals</span>
       <div class="section-line"></div>
     </div>
+
+    <!-- Core Concepts sub-header -->
+    <div style="margin-bottom:0.75rem;">
+      <div class="section-header">
+        <span class="section-num" style="border-color:#c084fc;color:#c084fc;">CORE</span>
+        <span class="section-title" style="color:#c084fc;">Core Concepts &amp; CIA Triad</span>
+        <div class="section-line"></div>
+      </div>
+    </div>
+    <div class="grid" style="margin-bottom:1.25rem;">
+      <div class="card"><div class="term">Data</div><div class="def">Raw, unorganized facts — numbers, text, symbols — that have no meaning on their own until they are processed. Example: 90, 85, 88.</div></div>
+      <div class="card"><div class="term">Information</div><div class="def">Processed data that has meaning and value. Example: "Average grade is 87.6" derived from the raw scores 90, 85, 88.</div></div>
+      <div class="card"><div class="term">Information Security</div><div class="def">The practice of protecting information from unauthorized access, use, disclosure, disruption, modification, or destruction — protecting data from being seen by the wrong people, changed, or lost.</div></div>
+      <div class="card"><div class="term">Information Value</div><div class="def">How important or sensitive data is to an individual or organization. Higher value means higher protection is needed. Example: public posts = low value; passwords and bank details = high value.</div></div>
+      <div class="card"><div class="term">Public Information</div><div class="def">Data classified as accessible to everyone — requires the least security protection.</div></div>
+      <div class="card"><div class="term">Private Information</div><div class="def">Data with limited access — not meant for public disclosure and requires moderate protection.</div></div>
+      <div class="card"><div class="term">Confidential Information</div><div class="def">Highly restricted data — requires the strongest security controls to prevent unauthorized access.</div></div>
+      <div class="card"><div class="term">Information Security Model</div><div class="def">A structured framework used to guide how information is protected — organizes security strategies and provides a systematic approach.</div></div>
+      <div class="card"><div class="term">CIA Triad</div><div class="def">The core model of Information Security consisting of three fundamental principles: Confidentiality, Integrity, and Availability.</div></div>
+      <div class="card"><div class="term">Confidentiality (CIA)</div><div class="def">Ensures that information is accessible only to authorized users. Methods include passwords, encryption, and access control.</div></div>
+      <div class="card"><div class="term">Integrity (CIA)</div><div class="def">Ensures that information is accurate, complete, and not altered without authorization. Examples: grades not changed, files not corrupted.</div></div>
+      <div class="card"><div class="term">Availability (CIA)</div><div class="def">Ensures that information and systems are accessible when needed by authorized users. Examples: websites staying online, systems working properly.</div></div>
+      <div class="card"><div class="term">Authentication</div><div class="def">Verifying the identity of a user or system — answering "Who are you?" Example: username and password login.</div></div>
+      <div class="card"><div class="term">Authorization</div><div class="def">Determining what an authenticated user is allowed to do. Example: Admin vs. Student permissions on a system.</div></div>
+      <div class="card"><div class="term">Non-repudiation</div><div class="def">Ensuring that an action or transaction cannot be denied after the fact. Example: system logs that record and prove who did what.</div></div>
+      <div class="card"><div class="term">Components of InfoSec (People)</div><div class="def">Users and individuals involved in handling and protecting information — one of the three main components of Information Security.</div></div>
+      <div class="card"><div class="term">Components of InfoSec (Processes)</div><div class="def">Rules and procedures that govern how information is managed and protected — one of the three main components of Information Security.</div></div>
+      <div class="card"><div class="term">Components of InfoSec (Technology)</div><div class="def">Hardware and software tools used to enforce security — one of the three main components of Information Security.</div></div>
+      <div class="card"><div class="term">Security Lifecycle</div><div class="def">A four-phase model describing how organizations handle threats: Protect (prevent attacks) → Detect (identify threats) → React (respond to incidents) → Recover (restore systems).</div></div>
+      <div class="card"><div class="term">Why InfoSec Matters</div><div class="def">Information security protects personal and sensitive data, prevents financial loss, maintains trust in systems, and ensures continuous operations.</div></div>
+      <div class="card"><div class="term">Goals of InfoSec</div><div class="def">Three goals: protect data from threats (safety of data), ensure systems function properly (reliability of systems), and prevent unauthorized access (controlled access).</div></div>
+      <div class="card"><div class="term">InfoSec Success Factors</div><div class="def">Success in Information Security depends on: user awareness, strong policies, updated systems, and continuous monitoring.</div></div>
+    </div>
+
+    <!-- Network Security sub-header -->
+    <div style="margin-bottom:0.75rem;">
+      <div class="section-header">
+        <span class="section-num" style="border-color:#c084fc;color:#c084fc;">NET</span>
+        <span class="section-title" style="color:#c084fc;">Network Security &amp; Access Controls</span>
+        <div class="section-line"></div>
+      </div>
+    </div>
     <div class="grid">
       <div class="card"><div class="term">Firewall</div><div class="def">Device or software that inspects IP packets and filters them based on rules (port, IP, protocol, time) to block unauthorized traffic.</div></div>
       <div class="card"><div class="term">Stateless Firewall</div><div class="def">Oldest firewall type (packet filter); uses an ACL to block/allow packets based on fixed criteria without tracking connection state.</div></div>
@@ -432,8 +474,8 @@
       <div class="card"><div class="term">Degaussing</div><div class="def">Using a powerful magnetic field to permanently erase data on HDDs. Destroys the drive in the process; has no effect on SSDs.</div></div>
       <div class="card"><div class="term">Flood Guard</div><div class="def">A switch/router feature that detects and stops traffic floods (used in DoS attacks) by blocking malformed or excessive traffic.</div></div>
       <div class="card"><div class="term">STP (Spanning Tree Protocol)</div><div class="def">Standard switch protocol that prevents network loops by allowing switches to communicate and automatically block redundant paths.</div></div>
-    </div>
-  </div>
+    </div><!-- end network grid -->
+  </div><!-- end section s5 -->
 
   <footer>IT-IAS02 — General de Jesus College · Compiled for review purposes only</footer>
 </div>
