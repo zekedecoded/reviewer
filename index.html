@@ -216,6 +216,9 @@
   .s4 .section-title { color: #ffd166; }
   .s5 .section-title { color: #c084fc; }
 
+  .s6 .card { --accent-color: #4fd1ff; }
+  .s6 .section-title { color: #4fd1ff; }
+
   /* FOOTER */
   footer {
     text-align: center;
@@ -237,7 +240,7 @@
   <header>
     <div class="badge">IT-IAS02 · Quick Reference</div>
     <h1>IT Security <span>Review</span></h1>
-    <p>// CIA Triad · OS Utilities · Network Scanning · Attacks · Redundancy · Wireless Security</p>
+    <p>// CIA Triad · OS Utilities · Network Scanning · Attacks · Redundancy · Wireless Security · Policy Development</p>
   </header>
 
   <!-- ===== SECTION 1: OS UTILITIES ===== -->
@@ -247,13 +250,109 @@
       <span class="section-title">Operating System Utilities</span>
       <div class="section-line"></div>
     </div>
-    <div class="grid">
-      <div class="card"><div class="term">ping</div><div class="def">Sends ICMP echo requests to a host to test if it is reachable and measure round-trip time.</div></div>
-      <div class="card"><div class="term">ipconfig</div><div class="def">Windows command that displays IP address, subnet mask, and default gateway of network adapters.</div></div>
-      <div class="card"><div class="term">ip</div><div class="def">Linux command used to display and manage IP addresses, routes, and network interfaces.</div></div>
-      <div class="card"><div class="term">arp</div><div class="def">Address Resolution Protocol tool; shows or modifies the mapping between IP addresses and MAC addresses.</div></div>
-      <div class="card"><div class="term">netstat</div><div class="def">Displays active network connections, open ports, and protocol statistics on a host.</div></div>
-      <div class="card"><div class="term">nslookup</div><div class="def">DNS query tool used to look up IP addresses or domain names from a DNS server.</div></div>
+
+    <!-- Overview -->
+    <div style="margin-bottom:0.75rem;">
+      <div class="section-header">
+        <span class="section-num" style="border-color:#4fffb0;color:#4fffb0;">OVERVIEW</span>
+        <span class="section-title" style="color:#4fffb0;">What Are OS Utilities?</span>
+        <div class="section-line"></div>
+      </div>
+    </div>
+    <div class="grid" style="margin-bottom:1.25rem;">
+      <div class="card"><div class="term">OS Utilities</div><div class="def">Built-in tools provided by an OS (Windows, Linux, macOS) that help users and administrators manage, maintain, diagnose, and troubleshoot the computer system. They are not regular apps — they work close to the OS and hardware.</div></div>
+      <div class="card"><div class="term">ip (Linux)</div><div class="def">Linux command used to display and manage IP addresses, routes, and network interfaces. The modern replacement for older ifconfig.</div></div>
+      <div class="card"><div class="term">netstat</div><div class="def">Displays active network connections, open ports, and protocol statistics on a host. Useful for spotting unusual connections.</div></div>
+      <div class="card"><div class="term">nslookup</div><div class="def">DNS query tool used to look up IP addresses or domain names from a DNS server. Helps verify DNS functionality.</div></div>
+    </div>
+
+    <!-- PING -->
+    <div style="margin-bottom:0.75rem;">
+      <div class="section-header">
+        <span class="section-num" style="border-color:#4fffb0;color:#4fffb0;">PING</span>
+        <span class="section-title" style="color:#4fffb0;">Ping — Network Diagnostic Utility</span>
+        <div class="section-line"></div>
+      </div>
+    </div>
+    <div class="grid" style="margin-bottom:0.75rem;">
+      <div class="card"><div class="term">ping</div><div class="def">A network diagnostic utility used to test connectivity between nodes on a network. Uses ICMP (Internet Control Message Protocol) to send Echo Request packets and receive Echo Reply packets.</div></div>
+      <div class="card"><div class="term">ICMP (Internet Control Message Protocol)</div><div class="def">The protocol ping uses. Ping sends ICMP Echo Request packets to a target; a successful ICMP Echo Reply confirms the device is reachable and IP-addressed.</div></div>
+      <div class="card"><div class="term">Ping — Check Reachability</div><div class="def">Sends ICMP Echo Requests to another device. If a reply comes back, the device is connected and alive on the network.</div></div>
+      <div class="card"><div class="term">Ping — Verify DNS</div><div class="def">Ping can use domain names (e.g., ping google.com). If ping fails to reach the IP but still resolves the domain name to an IP, DNS is working — the problem is elsewhere (routing or firewall).</div></div>
+      <div class="card"><div class="term">Ping — Detect Routing Problems</div><div class="def">If ping times out or returns "unreachable," it may indicate a routing issue, a firewall blocking ICMP, or a misconfigured network path.</div></div>
+      <div class="card"><div class="term">Ping — Measure Latency</div><div class="def">Ping shows the round-trip time (in ms) for packets to travel to the destination and back — used to measure network response time.</div></div>
+      <div class="card"><div class="term">Ping: Windows vs Linux</div><div class="def">Windows: sends 4 echo requests then stops automatically (use -t to run continuously; Ctrl+C to stop). Linux: runs continuously by default (Ctrl+C to stop).</div></div>
+    </div>
+    <div style="margin-top:0.75rem;margin-bottom:1.25rem;">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Switch</th><th>What It Does</th></tr></thead>
+          <tbody>
+            <tr><td>-a</td><td>Resolve IP addresses to hostnames</td></tr>
+            <tr><td>-f</td><td>Set Don't Fragment flag (IPv4 only)</td></tr>
+            <tr><td>-4</td><td>Force use of IPv4</td></tr>
+            <tr><td>-6</td><td>Force use of IPv6</td></tr>
+            <tr><td>-t <span style="color:#64748b;font-weight:400;">(Windows)</span></td><td>Ping continuously until stopped with Ctrl+C</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- IPCONFIG -->
+    <div style="margin-bottom:0.75rem;">
+      <div class="section-header">
+        <span class="section-num" style="border-color:#4fffb0;color:#4fffb0;">IPCONFIG</span>
+        <span class="section-title" style="color:#4fffb0;">IPConfig — Windows Network Settings Tool</span>
+        <div class="section-line"></div>
+      </div>
+    </div>
+    <div class="grid" style="margin-bottom:0.75rem;">
+      <div class="card"><div class="term">ipconfig</div><div class="def">A Windows-only command (not Mac or Linux) that displays the current state of the host system's network settings — IP address, subnet mask, and default gateway. Used to troubleshoot and manage IP and Ethernet configurations.</div></div>
+      <div class="card"><div class="term">IP Address</div><div class="def">Shown by ipconfig — the unique logical address assigned to your computer on the network.</div></div>
+      <div class="card"><div class="term">Subnet Mask</div><div class="def">Shown by ipconfig — defines which part of the IP address identifies the network vs. the host.</div></div>
+      <div class="card"><div class="term">Default Gateway</div><div class="def">Shown by ipconfig — the router's IP address that your computer sends traffic to when communicating outside the local network.</div></div>
+    </div>
+    <div style="margin-top:0.75rem;margin-bottom:1.25rem;">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Switch</th><th>Command</th><th>What It Does</th></tr></thead>
+          <tbody>
+            <tr><td>/all</td><td>ipconfig /all</td><td>Shows ALL network info — IP, MAC address, DNS, DHCP details</td></tr>
+            <tr><td>/renew</td><td>ipconfig /renew</td><td>Asks the network for a new IP address (refresh/renew IP from DHCP)</td></tr>
+            <tr><td>/release</td><td>ipconfig /release</td><td>Gives up / releases the current IP address back to DHCP</td></tr>
+            <tr><td>/flushdns</td><td>ipconfig /flushdns</td><td>Clears the computer's DNS cache (forces fresh DNS lookups)</td></tr>
+            <tr><td>/displaydns</td><td>ipconfig /displaydns</td><td>Shows the list of websites/domains your computer currently remembers in DNS cache</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ARP -->
+    <div style="margin-bottom:0.75rem;">
+      <div class="section-header">
+        <span class="section-num" style="border-color:#4fffb0;color:#4fffb0;">ARP</span>
+        <span class="section-title" style="color:#4fffb0;">ARP — Address Resolution Protocol</span>
+        <div class="section-line"></div>
+      </div>
+    </div>
+    <div class="grid" style="margin-bottom:0.75rem;">
+      <div class="card"><div class="term">arp</div><div class="def">A network protocol used to map IP addresses to MAC (hardware) addresses on a local network. Your computer uses ARP to find out the MAC address of a device it only knows the IP of.</div></div>
+      <div class="card"><div class="term">How ARP Works</div><div class="def">Your computer knows the target IP → broadcasts "Who has this IP?" to the network → the matching device replies with its MAC address → your computer saves this mapping in the ARP cache for future use.</div></div>
+      <div class="card"><div class="term">ARP Cache</div><div class="def">A local table stored on your computer that maps known IP addresses to their MAC addresses — so ARP doesn't have to broadcast the same question repeatedly.</div></div>
+      <div class="card"><div class="term">MAC Address</div><div class="def">The hardware (physical) address burned into a network interface card. ARP bridges the gap between IP addresses (logical) and MAC addresses (physical) on the local network.</div></div>
+    </div>
+    <div style="margin-top:0.75rem;margin-bottom:1.25rem;">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Switch</th><th>Command Example</th><th>What It Does</th></tr></thead>
+          <tbody>
+            <tr><td>-a</td><td>arp -a</td><td>Displays the current ARP cache (full IP ↔ MAC mapping list)</td></tr>
+            <tr><td>-v</td><td>arp -v</td><td>Displays more detailed info about ARP entries (rarely used)</td></tr>
+            <tr><td>-d</td><td>arp -d 192.168.1.10</td><td>Deletes the ARP cache entry for a specific IP address</td></tr>
+            <tr><td>-s</td><td>arp -s 192.168.1.20 11-22-33-44-55-66</td><td>Adds a static (manual) entry to the ARP cache</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -476,6 +575,68 @@
       <div class="card"><div class="term">STP (Spanning Tree Protocol)</div><div class="def">Standard switch protocol that prevents network loops by allowing switches to communicate and automatically block redundant paths.</div></div>
     </div><!-- end network grid -->
   </div><!-- end section s5 -->
+
+  <!-- ===== SECTION 6: POLICY DEVELOPMENT & AUP ===== -->
+  <div class="section s6">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <span class="section-title">Policy Development &amp; Acceptable Use Policy</span>
+      <div class="section-line"></div>
+    </div>
+
+    <!-- Core Concepts -->
+    <div style="margin-bottom:0.75rem;">
+      <div class="section-header">
+        <span class="section-num" style="border-color:#4fd1ff;color:#4fd1ff;">CORE</span>
+        <span class="section-title" style="color:#4fd1ff;">Core Policy Concepts</span>
+        <div class="section-line"></div>
+      </div>
+    </div>
+    <div class="grid" style="margin-bottom:1.25rem;">
+      <div class="card"><div class="term">Policy</div><div class="def">A formal set of rules and guidelines that govern behavior in an organization. Protects data, systems, and users from misuse or harm.</div></div>
+      <div class="card"><div class="term">Why Policies Matter</div><div class="def">Policies protect sensitive data, ensure legal and regulatory compliance, reduce organizational risk, and guide consistent user behavior.</div></div>
+      <div class="card"><div class="term">EISP (Enterprise Information Security Policy)</div><div class="def">The high-level, big-picture policy that sets the overall direction for information security. Created and endorsed by top management.</div></div>
+      <div class="card"><div class="term">ISSP (Issue-Specific Security Policy)</div><div class="def">Focuses on specific topics or issues. Examples: email usage policy, internet usage policy, BYOD (Bring Your Own Device) policy.</div></div>
+      <div class="card"><div class="term">SysSP (System-Specific Policy)</div><div class="def">Technical and detailed policy written for IT staff and system admins. Examples: firewall rules, password configurations, access control settings.</div></div>
+      <div class="card"><div class="term">Policy Types Summary</div><div class="def">EISP = Big picture (org-wide direction). ISSP = Specific rules for specific issues. SysSP = Technical instructions for IT systems.</div></div>
+    </div>
+
+    <!-- Policy Lifecycle -->
+    <div style="margin-bottom:0.75rem;">
+      <div class="section-header">
+        <span class="section-num" style="border-color:#4fd1ff;color:#4fd1ff;">LIFECYCLE</span>
+        <span class="section-title" style="color:#4fd1ff;">Policy Development Lifecycle</span>
+        <div class="section-line"></div>
+      </div>
+    </div>
+    <div class="grid" style="margin-bottom:1.25rem;">
+      <div class="card"><div class="term">1. Identify the Need</div><div class="def">Determine what problem the policy will solve. Example: repeated data breaches → need for a formal password policy.</div></div>
+      <div class="card"><div class="term">2. Research &amp; Gather Requirements</div><div class="def">Review relevant laws, standards (e.g., Data Privacy Act), industry regulations, and the organization's own operational needs.</div></div>
+      <div class="card"><div class="term">3. Draft the Policy</div><div class="def">Write the policy using clear, simple, and enforceable language. Rules must be easy to understand and follow.</div></div>
+      <div class="card"><div class="term">4. Review &amp; Approval</div><div class="def">The draft is reviewed by management, legal counsel, and IT teams. Revisions are made before formal approval.</div></div>
+      <div class="card"><div class="term">5. Implementation</div><div class="def">Communicate the approved policy to all employees and provide training so everyone understands and can comply.</div></div>
+      <div class="card"><div class="term">6. Enforcement</div><div class="def">Monitor compliance with the policy and apply consequences (warnings, suspension, termination) if it is violated.</div></div>
+      <div class="card"><div class="term">7. Review &amp; Update</div><div class="def">Policies must be periodically reviewed and updated as technology, threats, and organizational needs evolve over time.</div></div>
+      <div class="card"><div class="term">Policy as a Process</div><div class="def">Policy development is a continuous, structured lifecycle — not a one-time task. Policies require ongoing maintenance to stay effective.</div></div>
+    </div>
+
+    <!-- AUP -->
+    <div style="margin-bottom:0.75rem;">
+      <div class="section-header">
+        <span class="section-num" style="border-color:#4fd1ff;color:#4fd1ff;">AUP</span>
+        <span class="section-title" style="color:#4fd1ff;">Acceptable Use Policy (AUP)</span>
+        <div class="section-line"></div>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="term">AUP (Acceptable Use Policy)</div><div class="def">Defines how users are allowed to use an organization's IT resources (internet, computers, systems). Establishes what is permitted and what is not.</div></div>
+      <div class="card"><div class="term">Allowed Activities</div><div class="def">AUPs typically permit work-related browsing, accessing authorized company systems, and other activities directly supporting job functions.</div></div>
+      <div class="card"><div class="term">Prohibited Activities</div><div class="def">AUPs typically ban downloading illegal content, accessing inappropriate websites, and installing unauthorized software on company systems.</div></div>
+      <div class="card"><div class="term">User Responsibilities</div><div class="def">Users must protect their passwords, log out properly from systems, and take personal accountability for actions performed under their accounts.</div></div>
+      <div class="card"><div class="term">Monitoring Statement</div><div class="def">AUPs include a notice that user activity on organizational systems may be monitored, establishing transparency and deterrence.</div></div>
+      <div class="card"><div class="term">Consequences</div><div class="def">Violations of an AUP may result in escalating consequences: warnings, suspension of system access, or termination of employment.</div></div>
+    </div>
+  </div><!-- end section s6 -->
 
   <footer>IT-IAS02 — General de Jesus College · Compiled for review purposes only</footer>
 </div>
