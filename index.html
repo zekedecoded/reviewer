@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Security Review — IAS02</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --card: #191d28;
+    --border: #252a38;
+    --accent1: #4fffb0;
+    --accent2: #ff6b35;
+    --accent3: #7eb8ff;
+    --accent4: #ffd166;
+    --accent5: #c084fc;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.3;
+  }
+
+  .wrapper { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2.5rem 1rem 2rem;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%; transform: translateX(-50%);
+    width: 400px; height: 200px;
+    background: radial-gradient(ellipse, rgba(78,255,176,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent1);
+    border: 1px solid var(--accent1);
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+  }
+  header h1 {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: #fff;
+  }
+  header h1 span { color: var(--accent1); }
+  header p {
+    margin-top: 0.75rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.78rem;
+  }
+
+  /* SECTION */
+  .section {
+    margin-bottom: 2.5rem;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* CARDS GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-color, var(--accent1));
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: var(--accent-color, var(--accent1));
+    border-radius: 12px 0 0 12px;
+  }
+
+  .term {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--accent-color, var(--accent1));
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.03em;
+  }
+  .def {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: #c8d0de;
+  }
+
+  /* RAID TABLE */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+  }
+  thead { background: var(--surface); }
+  th {
+    font-family: var(--mono);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.65rem;
+    color: var(--accent4);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid var(--border);
+    color: #c8d0de;
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.03); }
+  td:first-child {
+    font-family: var(--mono);
+    color: var(--accent4);
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  /* COLOR THEMES PER SECTION */
+  .s1 .card { --accent-color: #4fffb0; }
+  .s2 .card { --accent-color: #7eb8ff; }
+  .s3 .card { --accent-color: #ff6b35; }
+  .s4 .card { --accent-color: #ffd166; }
+  .s5 .card { --accent-color: #c084fc; }
+
+  .s1 .section-title { color: #4fffb0; }
+  .s2 .section-title { color: #7eb8ff; }
+  .s3 .section-title { color: #ff6b35; }
+  .s4 .section-title { color: #ffd166; }
+  .s5 .section-title { color: #c084fc; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    margin-top: 3rem;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+  }
+
+  @media (max-width: 480px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="badge">IT-IAS02 · Quick Reference</div>
+    <h1>IT Security <span>Review</span></h1>
+    <p>// Operating Systems · Network Scanning · Attacks · Redundancy · InfoSec Fundamentals</p>
+  </header>
+
+  <!-- ===== SECTION 1: OS UTILITIES ===== -->
+  <div class="section s1">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">Operating System Utilities</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="term">ping</div><div class="def">Sends ICMP echo requests to a host to test if it is reachable and measure round-trip time.</div></div>
+      <div class="card"><div class="term">ipconfig</div><div class="def">Windows command that displays IP address, subnet mask, and default gateway of network adapters.</div></div>
+      <div class="card"><div class="term">ip</div><div class="def">Linux command used to display and manage IP addresses, routes, and network interfaces.</div></div>
+      <div class="card"><div class="term">arp</div><div class="def">Address Resolution Protocol tool; shows or modifies the mapping between IP addresses and MAC addresses.</div></div>
+      <div class="card"><div class="term">netstat</div><div class="def">Displays active network connections, open ports, and protocol statistics on a host.</div></div>
+      <div class="card"><div class="term">nslookup</div><div class="def">DNS query tool used to look up IP addresses or domain names from a DNS server.</div></div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 2: NETWORK SCANNING & ANALYSIS ===== -->
+  <div class="section s2">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Network Scanning &amp; Analysis</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="term">Network Scanner</div><div class="def">An inventory tool that queries hosts on a LAN using TCP/IP protocols to discover IP addresses, MAC addresses, open ports, and OS information.</div></div>
+      <div class="card"><div class="term">Baseline</div><div class="def">A network asset verification that documents every device (servers, printers, routers, switches, WAPs) on the network — the "official" inventory.</div></div>
+      <div class="card"><div class="term">Simple Scanner</div><div class="def">Fast, lightweight scanner (e.g., Angry IP Scanner) that does basic ping-based scans and needs minimal resources.</div></div>
+      <div class="card"><div class="term">Powerful Scanner</div><div class="def">A scanner using multiple protocols to dig deeply into a network and return large amounts of detailed data.</div></div>
+      <div class="card"><div class="term">Protocol Analyzer</div><div class="def">Hardware or software that captures and analyzes network traffic; also called a packet analyzer. Used to inventory and inspect Ethernet frames and IP packets.</div></div>
+      <div class="card"><div class="term">Wireshark</div><div class="def">The most popular open-source packet analyzer (originally Ethereal, 1998). Shows three panes: frame list, frame details, and raw hex data.</div></div>
+      <div class="card"><div class="term">TShark</div><div class="def">Command-line version of Wireshark; captures packets to a .pcap file without a GUI — ideal for scheduled/overnight captures.</div></div>
+      <div class="card"><div class="term">SNMP</div><div class="def">Simple Network Management Protocol; used by network devices to send performance and security event data for monitoring.</div></div>
+      <div class="card"><div class="term">SIEM</div><div class="def">Security Information and Event Management; system that collects, correlates, and analyzes log data from multiple network sources to detect security incidents.</div></div>
+      <div class="card"><div class="term">Event Log</div><div class="def">Windows OS-generated logs (called syslogs or machine logs in Linux) recording system and application activity.</div></div>
+      <div class="card"><div class="term">Audit Log</div><div class="def">Security or audit trails stored by the OS; also called audit trails — used by security professionals to trace security-related events.</div></div>
+      <div class="card"><div class="term">Log Analysis</div><div class="def">Reviewing log files to find specific security events and correlate them into a pattern that indicates a problem over a time frame.</div></div>
+      <div class="card"><div class="term">Centralized Log Management</div><div class="def">Automatically collects and sends log files from multiple machines to a central server for easier review.</div></div>
+      <div class="card"><div class="term">Decentralized Log Management</div><div class="def">Admin manually visits each host to collect and review logs — common in small networks or disconnected segments.</div></div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3: ATTACKS SYSTEM ===== -->
+  <div class="section s3">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">Attacks System</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="term">Man-in-the-Middle (MitM)</div><div class="def">Attacker secretly intercepts communication between two parties, often targeting apps with weak or no authentication.</div></div>
+      <div class="card"><div class="term">Zero-Day Attack</div><div class="def">An attack exploiting a previously unknown and unpatched vulnerability before developers can release a fix.</div></div>
+      <div class="card"><div class="term">Privilege Escalation</div><div class="def">Attacker gains higher-level access than originally authorized, often using a low-level or service account to reach admin-level control.</div></div>
+      <div class="card"><div class="term">IP Spoofing</div><div class="def">Replacing a legitimate IP address with a fake one to disguise the attacker's identity or impersonate another host.</div></div>
+      <div class="card"><div class="term">MAC Spoofing</div><div class="def">Same concept as IP spoofing, but targeting MAC addresses to impersonate a trusted device on the network.</div></div>
+      <div class="card"><div class="term">ARP Poisoning</div><div class="def">Flooding the network with fake ARP replies to corrupt ARP tables, redirecting traffic through the attacker's machine.</div></div>
+      <div class="card"><div class="term">DoS (Denial of Service)</div><div class="def">Attack that overwhelms a program, OS, or server with traffic or requests to shut it down and deny access to legitimate users.</div></div>
+      <div class="card"><div class="term">Refactoring (Malicious)</div><div class="def">Modifying the internals of software (e.g., a driver) without changing its visible behavior — used to sneak in malicious code.</div></div>
+      <div class="card"><div class="term">Shimming</div><div class="def">Inserting a malicious library (shim) between the OS and a driver to intercept and manipulate data without replacing the signed driver.</div></div>
+      <div class="card"><div class="term">Virus</div><div class="def">Malware that requires a user action to spread (e.g., opening an infected file). Can infect directories or boot sectors.</div></div>
+      <div class="card"><div class="term">Crypto-malware / Ransomware</div><div class="def">Uses cryptography to lock a user out of their device and demands payment to decrypt it.</div></div>
+      <div class="card"><div class="term">Worm</div><div class="def">Self-replicating malware that spreads automatically across a network with little or no user interaction.</div></div>
+      <div class="card"><div class="term">Trojan Horse</div><div class="def">Malware disguised as a legitimate program (game, utility). Typically tries to harvest personal data from the victim.</div></div>
+      <div class="card"><div class="term">Rootkit</div><div class="def">Malware that infects core OS files, hides itself from antivirus tools, and can conceal other malware on the host.</div></div>
+      <div class="card"><div class="term">Keylogger</div><div class="def">Records every keystroke and sends them to an attacker. Symptoms include slowdowns and unusual network traffic.</div></div>
+      <div class="card"><div class="term">Adware</div><div class="def">Malware that displays unwanted pop-up ads, often to drive the user to visit a site or buy a product.</div></div>
+      <div class="card"><div class="term">Spyware</div><div class="def">Secretly monitors user activity and sends data back to the attacker without the victim's knowledge.</div></div>
+      <div class="card"><div class="term">Botnet</div><div class="def">A network of malware-infected computers (bots) controlled remotely to launch large-scale attacks on systems or networks.</div></div>
+      <div class="card"><div class="term">Logic Bomb</div><div class="def">Malicious script set to execute at a specific time or when certain conditions are met (e.g., a scheduled task).</div></div>
+      <div class="card"><div class="term">Backdoor</div><div class="def">An unauthorized hidden entry point into software, often left during development, that bypasses normal authentication.</div></div>
+      <div class="card"><div class="term">RAT (Remote Admin Tool)</div><div class="def">Software that gives an attacker remote access to a victim's computer; commonly used as part of a botnet.</div></div>
+      <div class="card"><div class="term">Bluejacking</div><div class="def">Sending unsolicited messages (texts, images) to a nearby Bluetooth-enabled device.</div></div>
+      <div class="card"><div class="term">Bluesnarfing</div><div class="def">Attacker steals data from a victim's device by connecting to it via Bluetooth without authorization.</div></div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 4: STRENGTHENING REDUNDANCY & AVAILABILITY ===== -->
+  <div class="section s4">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">Strengthening Redundancy &amp; Availability</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="term">Non-persistence</div><div class="def">A system design strategy where changes (including from attacks) are rolled back instead of persisting — via snapshots, rollbacks, or live boot.</div></div>
+      <div class="card"><div class="term">Snapshot</div><div class="def">A saved state of a VM at a specific point in time; allows rollback to that state if the system is compromised or corrupted.</div></div>
+      <div class="card"><div class="term">Revert / Rollback</div><div class="def">Returning an OS to a previously saved state (restore point in Windows) to undo damage from an attack or bad update.</div></div>
+      <div class="card"><div class="term">Live Boot Media</div><div class="def">A bootable OS on removable media (e.g., Kali Linux USB) that runs independently — no hard drive required on the host.</div></div>
+      <div class="card"><div class="term">Redundancy</div><div class="def">Having duplicate systems, storage, or network paths so a failure in one does not stop overall operations.</div></div>
+      <div class="card"><div class="term">RAID</div><div class="def">Redundant Array of Independent Disks — spreads data across multiple drives for fault tolerance and/or performance.</div></div>
+      <div class="card"><div class="term">Striping</div><div class="def">Writing pieces of data across two or more physical disks simultaneously for faster read/write speeds (no redundancy by itself).</div></div>
+      <div class="card"><div class="term">Mirroring</div><div class="def">Duplicating data exactly on two disks so if one fails, the other has a complete copy (full redundancy, uses double space).</div></div>
+      <div class="card"><div class="term">Parity</div><div class="def">Extra data stored across disks that allows the array to reconstruct a failed drive's data without keeping a full mirror copy.</div></div>
+      <div class="card"><div class="term">Load Balancing</div><div class="def">Distributes incoming requests across multiple servers so no single server is overwhelmed; increases performance and availability.</div></div>
+      <div class="card"><div class="term">Clustering</div><div class="def">Running multiple identically-configured servers together; if one fails, the others continue operating without user interruption (fault tolerance).</div></div>
+      <div class="card"><div class="term">Elasticity</div><div class="def">Ability to automatically add or remove server instances based on current demand (used in virtualization/cloud environments).</div></div>
+      <div class="card"><div class="term">EMI (Electromagnetic Interference)</div><div class="def">When one device's electromagnetic field disrupts another — causes slow data transmission but rarely destroys hardware.</div></div>
+      <div class="card"><div class="term">EMP (Electromagnetic Pulse)</div><div class="def">A burst of electrical energy through the air that can permanently destroy unprotected electronic circuits and computer components.</div></div>
+      <div class="card"><div class="term">RFI (Radio Frequency Interference)</div><div class="def">EMI that operates in the radio frequency range (e.g., 802.11 and cellular bands); typically disrupts other radio sources.</div></div>
+      <div class="card"><div class="term">TPM (Trusted Platform Module)</div><div class="def">A chip on modern computers that stores cryptographic keys and verifies system integrity during boot to ensure firmware hasn't been tampered with.</div></div>
+      <div class="card"><div class="term">BitLocker</div><div class="def">Windows Pro's Full Disk Encryption (FDE) tool; uses TPM to encrypt the entire drive so data is unreadable without proper authentication.</div></div>
+      <div class="card"><div class="term">SED (Self-Encrypting Drive)</div><div class="def">A drive with built-in circuitry that automatically encrypts and decrypts all data — no software FDE tool needed.</div></div>
+      <div class="card"><div class="term">HSM (Hardware Security Module)</div><div class="def">A dedicated hardware device that performs cryptographic operations hundreds of times faster than a standard CPU — used for key management.</div></div>
+      <div class="card"><div class="term">DMZ (Demilitarized Zone)</div><div class="def">A separate network segment between the public internet and internal LAN, hosting public-facing servers (web, email) to limit exposure of internal systems.</div></div>
+      <div class="card"><div class="term">NAT (Network Address Translation)</div><div class="def">Maps private internal IP addresses to one or more public IPs, hiding internal network structure and conserving public IP space.</div></div>
+      <div class="card"><div class="term">VLAN (Virtual LAN)</div><div class="def">Logically separates hosts on the same physical switch into isolated broadcast domains — improves security and reduces unnecessary traffic.</div></div>
+      <div class="card"><div class="term">NAC (Network Access Control)</div><div class="def">Checks a device's health/security settings before allowing it onto the network — can use agents or be agentless.</div></div>
+      <div class="card"><div class="term">Patch Management</div><div class="def">A formal process of testing and applying OS/software updates to fix vulnerabilities — should be tested on systems before enterprise-wide deployment.</div></div>
+    </div>
+
+    <div style="margin-top:1.25rem;">
+      <div class="section-header">
+        <span class="section-num" style="border-color:#ffd166;color:#ffd166;">RAID</span>
+        <span class="section-title" style="color:#ffd166;">RAID Levels at a Glance</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Level</th><th>Name</th><th>Method</th><th>Min Drives</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>RAID 0</td><td>Striping</td><td>Striping only</td><td>2</td><td>Speed only — NO redundancy</td></tr>
+            <tr><td>RAID 1</td><td>Mirroring</td><td>Mirroring only</td><td>2</td><td>Full redundancy — wastes half the space</td></tr>
+            <tr><td>RAID 5</td><td>Striping + Parity</td><td>Stripe + distributed parity</td><td>3</td><td>Survives 1 drive failure</td></tr>
+            <tr><td>RAID 6</td><td>Double Parity</td><td>Stripe + double parity</td><td>4</td><td>Survives 2 drive failures</td></tr>
+            <tr><td>RAID 1+0</td><td>Mirror + Stripe</td><td>Stripe of mirrored pairs</td><td>4</td><td>Speed + redundancy</td></tr>
+            <tr><td>RAID 0+1</td><td>Stripe + Mirror</td><td>Mirror of striped arrays</td><td>4</td><td>Speed + redundancy</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: INFORMATION SECURITY FUNDAMENTALS ===== -->
+  <div class="section s5">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">Information Security Fundamentals</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="term">Firewall</div><div class="def">Device or software that inspects IP packets and filters them based on rules (port, IP, protocol, time) to block unauthorized traffic.</div></div>
+      <div class="card"><div class="term">Stateless Firewall</div><div class="def">Oldest firewall type (packet filter); uses an ACL to block/allow packets based on fixed criteria without tracking connection state.</div></div>
+      <div class="card"><div class="term">Stateful Firewall</div><div class="def">Tracks the state of connections (e.g., TCP handshake) and only allows packets that are part of an established, legitimate session.</div></div>
+      <div class="card"><div class="term">Proxy Server</div><div class="def">An intermediary that accepts client requests, processes them, and forwards them to servers — used to enforce policies and hide internal systems.</div></div>
+      <div class="card"><div class="term">Forward Proxy</div><div class="def">Sits between clients and the internet; enforces outbound access policies (e.g., blocking URLs or limiting hours).</div></div>
+      <div class="card"><div class="term">Reverse Proxy</div><div class="def">Sits in front of servers; filters incoming requests to protect servers from attacks before forwarding good traffic.</div></div>
+      <div class="card"><div class="term">Implicit Denial</div><div class="def">ACL default behavior — unless a rule explicitly allows traffic, it is blocked. "Deny all unless permitted."</div></div>
+      <div class="card"><div class="term">HIDS</div><div class="def">Host-Based Intrusion Detection System — detects intrusions on a host and reports them (does not block).</div></div>
+      <div class="card"><div class="term">HIPS</div><div class="def">Host-Based Intrusion Prevention System — actively blocks detected intrusions, not just reporting them.</div></div>
+      <div class="card"><div class="term">Anti-malware</div><div class="def">Modern security software with real-time scanning of incoming data, checking for known malware signatures in emails and web traffic.</div></div>
+      <div class="card"><div class="term">DEP (Data Execution Prevention)</div><div class="def">Windows feature using the CPU's NX bit to prevent code from running in data-only memory areas — stops buffer overflow exploits.</div></div>
+      <div class="card"><div class="term">File Integrity Check</div><div class="def">Verifies that files haven't been tampered with by comparing hashes, timestamps, version numbers, and digital signatures against known-good values.</div></div>
+      <div class="card"><div class="term">DLP (Data Loss Prevention)</div><div class="def">Tools that monitor and control data movement to ensure sensitive data isn't copied, moved, or leaked outside the organization.</div></div>
+      <div class="card"><div class="term">Application Whitelisting</div><div class="def">Only pre-approved applications are allowed to run or install on a system — everything else is blocked by default.</div></div>
+      <div class="card"><div class="term">Application Blacklisting</div><div class="def">Identified dangerous or unwanted applications are blocked; everything not on the list is allowed.</div></div>
+      <div class="card"><div class="term">Trusted OS</div><div class="def">An OS designed and certified for high-security environments (e.g., SE Linux, Trusted Solaris, Trusted AIX, Windows 10).</div></div>
+      <div class="card"><div class="term">Clear (Data Sanitation)</div><div class="def">Overwriting storage media using built-in device commands or disk wiping utilities (e.g., single overwrite with binary zeros).</div></div>
+      <div class="card"><div class="term">Purge (Data Sanitation)</div><div class="def">Destroying data using methods beyond basic commands — degaussing (for HDDs only) or eliminating encryption keys on encrypted media.</div></div>
+      <div class="card"><div class="term">Destroy (Data Sanitation)</div><div class="def">Physically destroying the storage media itself — the most thorough method; professional shredding/destruction services available.</div></div>
+      <div class="card"><div class="term">WEP</div><div class="def">Wired Equivalent Privacy — first 802.11 wireless security standard; uses RC4 but was mathematically broken within years. Now obsolete.</div></div>
+      <div class="card"><div class="term">WPA</div><div class="def">Wi-Fi Protected Access (2003); improved on WEP with larger, dynamic keys using TKIP. Has Personal (PSK) and Enterprise (RADIUS) modes.</div></div>
+      <div class="card"><div class="term">WPA2</div><div class="def">Final implementation of IEEE 802.11i; uses AES/CCMP encryption — the strongest standard for most current networks.</div></div>
+      <div class="card"><div class="term">AES</div><div class="def">Advanced Encryption Standard; uses the Rijndael algorithm with 128-bit keys and block size — the encryption method in WPA2 (via CCMP).</div></div>
+      <div class="card"><div class="term">TKIP</div><div class="def">Temporal Key Integrity Protocol; WPA's dynamic per-packet key generation system using RC4 — adds randomness to prevent key reuse.</div></div>
+      <div class="card"><div class="term">RC4</div><div class="def">Stream cipher used in WEP and WPA; strong on its own but WEP's poor implementation (weak IVs, static keys) made it exploitable.</div></div>
+      <div class="card"><div class="term">WPS</div><div class="def">Wi-Fi Protected Setup; lets devices connect via a button push, but its 8-digit PIN (only ~11,000 combinations) is easily brute-forced.</div></div>
+      <div class="card"><div class="term">802.1X</div><div class="def">Port-based network access control framework supporting multiple authentication protocols — used in enterprise wired and wireless networks.</div></div>
+      <div class="card"><div class="term">EAP</div><div class="def">Extensible Authentication Protocol; a flexible authentication framework (not a single protocol) supporting certificates, smart cards, and username/password.</div></div>
+      <div class="card"><div class="term">EAP-TLS</div><div class="def">Most secure EAP variant; requires digital certificates on both client and server sides for mutual authentication.</div></div>
+      <div class="card"><div class="term">EAP-TTLS</div><div class="def">Adds a TLS tunnel for protection; only requires a server-side certificate (not client-side).</div></div>
+      <div class="card"><div class="term">PEAP</div><div class="def">Protected EAP; creates a TLS tunnel using a server-side certificate, then authenticates the client inside the tunnel.</div></div>
+      <div class="card"><div class="term">LEAP</div><div class="def">Lightweight EAP — a Cisco proprietary protocol using dynamic WEP keys and RADIUS. Now replaced by EAP-FAST due to security flaws.</div></div>
+      <div class="card"><div class="term">EAP-FAST</div><div class="def">Cisco's replacement for LEAP; uses TLS tunnels for secure, lightweight authentication.</div></div>
+      <div class="card"><div class="term">Rogue Access Point</div><div class="def">A fake WAP set up by an attacker to lure users into connecting — all their traffic is then intercepted and monitored.</div></div>
+      <div class="card"><div class="term">Evil Twin Attack</div><div class="def">A variant of the rogue AP attack where the attacker's AP uses the same (or similar) SSID as the legitimate network.</div></div>
+      <div class="card"><div class="term">Deauthentication Attack</div><div class="def">Forcing a wireless client to disconnect from the WAP so it must reconnect — allowing the attacker to capture the handshake for cracking.</div></div>
+      <div class="card"><div class="term">Replay Attack</div><div class="def">Intercepting credentials or data and retransmitting them later to impersonate the victim — effective against plain-text or weakly encrypted traffic.</div></div>
+      <div class="card"><div class="term">NFC (Near Field Communication)</div><div class="def">Short-range radio communication (using RFID) that requires devices to be very close or touching — vulnerable to relay, MitM, and jamming attacks.</div></div>
+      <div class="card"><div class="term">Packet Sniffing</div><div class="def">Capturing and reading unencrypted wireless or wired network traffic — requires a NIC in promiscuous mode and tools like Wireshark.</div></div>
+      <div class="card"><div class="term">Jamming</div><div class="def">Intentional DoS attack on wireless networks — overwhelms the radio signal to prevent legitimate devices from communicating.</div></div>
+      <div class="card"><div class="term">SSID Broadcasting</div><div class="def">A WAP advertising its network name so devices can find it. Disabling it (cloaking) adds minor obscurity but is not a real security control.</div></div>
+      <div class="card"><div class="term">MAC Filtering</div><div class="def">Restricting wireless access to only approved MAC addresses. Easy to bypass via MAC spoofing — not a standalone security measure.</div></div>
+      <div class="card"><div class="term">Captive Portal</div><div class="def">A web page that wireless users must authenticate through before they can access the network (used in hotels, enterprises, airports).</div></div>
+      <div class="card"><div class="term">Fat AP</div><div class="def">A "thick" access point with full built-in controls (ACLs, encryption settings, etc.) — each is managed individually or via a central console.</div></div>
+      <div class="card"><div class="term">Thin AP</div><div class="def">A simple repeater AP that forwards wireless signals to a centralized Access Controller (AC) which handles encryption and security.</div></div>
+      <div class="card"><div class="term">Site Survey</div><div class="def">A technical review of a wireless network's coverage, interference sources, antenna placement, and capacity — done before or during network deployment.</div></div>
+      <div class="card"><div class="term">O-TTPS</div><div class="def">Open Trustworthy Technology Vendor Standard; a framework for securing the ICT supply chain for hardware and software products.</div></div>
+      <div class="card"><div class="term">Degaussing</div><div class="def">Using a powerful magnetic field to permanently erase data on HDDs. Destroys the drive in the process; has no effect on SSDs.</div></div>
+      <div class="card"><div class="term">Flood Guard</div><div class="def">A switch/router feature that detects and stops traffic floods (used in DoS attacks) by blocking malformed or excessive traffic.</div></div>
+      <div class="card"><div class="term">STP (Spanning Tree Protocol)</div><div class="def">Standard switch protocol that prevents network loops by allowing switches to communicate and automatically block redundant paths.</div></div>
+    </div>
+  </div>
+
+  <footer>IT-IAS02 — General de Jesus College · Compiled for review purposes only</footer>
+</div>
+</body>
+</html>
