@@ -3,642 +3,947 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IT Security Review — IAS02</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<title>Midterm IT IAS 02</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0d0f14;
-    --surface: #13161e;
-    --card: #191d28;
-    --border: #252a38;
-    --accent1: #4fffb0;
-    --accent2: #ff6b35;
-    --accent3: #7eb8ff;
-    --accent4: #ffd166;
-    --accent5: #c084fc;
-    --text: #e2e8f0;
-    --muted: #64748b;
-    --mono: 'Space Mono', monospace;
-    --sans: 'Syne', sans-serif;
+    --surface: #161922;
+    --surface2: #1e2330;
+    --border: #2a3040;
+    --accent: #00e5a0;
+    --accent2: #0099ff;
+    --warn: #ff6b35;
+    --text: #e8eaf0;
+    --muted: #6b7585;
+    --correct: #00c07a;
+    --wrong: #ff4757;
   }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
+    font-family: 'IBM Plex Sans', sans-serif;
     background: var(--bg);
     color: var(--text);
-    font-family: var(--sans);
     min-height: 100vh;
-    padding: 2rem 1rem 4rem;
+    padding: 0;
   }
-
-  /* NOISE OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.3;
-  }
-
-  .wrapper { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
 
   /* HEADER */
-  header {
-    text-align: center;
-    margin-bottom: 3rem;
-    padding: 2.5rem 1rem 2rem;
-    border: 1px solid var(--border);
-    border-radius: 16px;
+  .exam-header {
     background: var(--surface);
-    position: relative;
-    overflow: hidden;
-  }
-  header::before {
-    content: '';
-    position: absolute;
-    top: -60px; left: 50%; transform: translateX(-50%);
-    width: 400px; height: 200px;
-    background: radial-gradient(ellipse, rgba(78,255,176,0.12) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .badge {
-    display: inline-block;
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--accent1);
-    border: 1px solid var(--accent1);
-    padding: 0.25rem 0.75rem;
-    border-radius: 999px;
-    margin-bottom: 1rem;
-  }
-  header h1 {
-    font-size: clamp(1.8rem, 5vw, 2.8rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    color: #fff;
-  }
-  header h1 span { color: var(--accent1); }
-  header p {
-    margin-top: 0.75rem;
-    color: var(--muted);
-    font-family: var(--mono);
-    font-size: 0.78rem;
+    border-bottom: 2px solid var(--accent);
+    padding: 24px 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
   }
 
-  /* SECTION */
-  .section {
-    margin-bottom: 2.5rem;
+  .exam-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    font-weight: 600;
   }
+
+  .exam-subtitle {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .score-pill {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--accent);
+    text-align: center;
+    min-width: 140px;
+  }
+
+  .score-pill .score-label {
+    font-size: 10px;
+    color: var(--muted);
+    display: block;
+    letter-spacing: 1px;
+  }
+
+  .progress-bar-wrap {
+    flex: 1;
+    max-width: 300px;
+    background: var(--surface2);
+    border-radius: 4px;
+    height: 6px;
+    overflow: hidden;
+  }
+
+  .progress-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  /* CONTENT */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .instruction-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent2);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 36px;
+    line-height: 1.6;
+  }
+
+  /* SECTION HEADERS */
   .section-header {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
+    gap: 14px;
+    margin: 48px 0 24px;
   }
+
   .section-num {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    padding: 0.15rem 0.5rem;
+    background: var(--accent);
+    color: #000;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1px;
+    padding: 4px 10px;
     border-radius: 4px;
+  }
+
+  .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.5px;
+  }
+
+  .section-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* IDENTIFICATION */
+  .id-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .id-item:focus-within {
+    border-color: var(--accent2);
+  }
+
+  .id-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    min-width: 20px;
+  }
+
+  .id-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    color: var(--accent);
+    width: 200px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .id-input:focus {
+    border-color: var(--accent2);
+    background: #1a2035;
+  }
+
+  .id-input.correct { border-color: var(--correct); background: #0d1f17; color: var(--correct); }
+  .id-input.wrong { border-color: var(--wrong); background: #1f0d0d; color: var(--wrong); }
+
+  .id-desc {
+    font-size: 13px;
+    color: var(--text);
+    flex: 1;
+    line-height: 1.5;
+  }
+
+  .id-feedback {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    min-width: 60px;
+    text-align: right;
+  }
+
+  /* MULTIPLE CHOICE */
+  .mc-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+
+  .mc-question {
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 14px;
+    line-height: 1.6;
+    font-weight: 500;
+  }
+
+  .mc-num {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--accent2);
+    margin-right: 8px;
+    font-size: 12px;
+  }
+
+  .mc-options {
+    display: grid;
+    gap: 8px;
+  }
+
+  .mc-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 13px;
+    color: var(--text);
+    user-select: none;
+  }
+
+  .mc-option:hover:not(.locked) {
+    border-color: var(--accent2);
+    background: #1a2035;
+  }
+
+  .mc-option.selected {
+    border-color: var(--accent2);
+    background: #0d1a2e;
+    color: var(--accent2);
+  }
+
+  .mc-option.correct-ans {
+    border-color: var(--correct);
+    background: #0d1f17;
+    color: var(--correct);
+  }
+
+  .mc-option.wrong-ans {
+    border-color: var(--wrong);
+    background: #1f0d0d;
+    color: var(--wrong);
+  }
+
+  .option-letter {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 12px;
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    background: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+
+  .mc-option.selected .option-letter { background: var(--accent2); color: #000; }
+  .mc-option.correct-ans .option-letter { background: var(--correct); color: #000; }
+  .mc-option.wrong-ans .option-letter { background: var(--wrong); color: #fff; }
+
+  /* TRUE/FALSE */
+  .tf-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .tf-statement {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .tf-num {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--accent2);
+    font-size: 12px;
+    min-width: 22px;
+    margin-top: 1px;
+  }
+
+  .tf-buttons {
+    display: flex;
+    gap: 8px;
     flex-shrink: 0;
   }
-  .section-title {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-  }
-  .section-line {
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
 
-  /* CARDS GRID */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 0.75rem;
-  }
-
-  .card {
-    background: var(--card);
+  .tf-btn {
+    padding: 7px 18px;
+    border-radius: 6px;
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1rem 1.1rem;
-    transition: border-color 0.2s, transform 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-  .card:hover {
-    transform: translateY(-2px);
-    border-color: var(--accent-color, var(--accent1));
-  }
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px; height: 100%;
-    background: var(--accent-color, var(--accent1));
-    border-radius: 12px 0 0 12px;
-  }
-
-  .term {
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: var(--accent-color, var(--accent1));
-    margin-bottom: 0.35rem;
-    letter-spacing: 0.03em;
-  }
-  .def {
-    font-size: 0.82rem;
-    line-height: 1.55;
-    color: #c8d0de;
-  }
-
-  /* RAID TABLE */
-  .table-wrap {
-    overflow-x: auto;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.78rem;
-  }
-  thead { background: var(--surface); }
-  th {
-    font-family: var(--mono);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.65rem;
-    color: var(--accent4);
-    padding: 0.75rem 1rem;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-  }
-  td {
-    padding: 0.65rem 1rem;
-    border-bottom: 1px solid var(--border);
-    color: #c8d0de;
-    vertical-align: top;
-  }
-  tr:last-child td { border-bottom: none; }
-  tbody tr:hover { background: rgba(255,255,255,0.03); }
-  td:first-child {
-    font-family: var(--mono);
-    color: var(--accent4);
-    font-size: 0.72rem;
-    white-space: nowrap;
-  }
-
-  /* COLOR THEMES PER SECTION */
-  .s1 .card { --accent-color: #4fffb0; }
-  .s2 .card { --accent-color: #7eb8ff; }
-  .s3 .card { --accent-color: #ff6b35; }
-  .s4 .card { --accent-color: #ffd166; }
-  .s5 .card { --accent-color: #c084fc; }
-
-  .s1 .section-title { color: #4fffb0; }
-  .s2 .section-title { color: #7eb8ff; }
-  .s3 .section-title { color: #ff6b35; }
-  .s4 .section-title { color: #ffd166; }
-  .s5 .section-title { color: #c084fc; }
-
-  .s6 .card { --accent-color: #4fd1ff; }
-  .s6 .section-title { color: #4fd1ff; }
-
-  /* FOOTER */
-  footer {
-    text-align: center;
-    margin-top: 3rem;
+    background: var(--surface2);
     color: var(--muted);
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.08em;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
   }
 
-  @media (max-width: 480px) {
-    .grid { grid-template-columns: 1fr; }
+  .tf-btn:hover:not(.locked) {
+    border-color: var(--accent2);
+    color: var(--text);
+  }
+
+  .tf-btn.selected-t { border-color: var(--correct); background: #0d1f17; color: var(--correct); }
+  .tf-btn.selected-f { border-color: var(--warn); background: #1f160d; color: var(--warn); }
+  .tf-btn.correct-mark { border-color: var(--correct); background: #0d1f17; color: var(--correct); }
+  .tf-btn.wrong-mark { border-color: var(--wrong); background: #1f0d0d; color: var(--wrong); }
+
+  /* MATCHING */
+  .match-table {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .match-bank {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .bank-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .bank-item strong {
+    color: var(--accent);
+    margin-right: 4px;
+  }
+
+  .match-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  .match-item:last-child { border-bottom: none; }
+
+  .match-num {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--accent2);
+    font-size: 12px;
+    min-width: 24px;
+  }
+
+  .match-select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    outline: none;
+    cursor: pointer;
+    min-width: 130px;
+    transition: border-color 0.2s;
+  }
+
+  .match-select:focus { border-color: var(--accent2); }
+  .match-select.correct { border-color: var(--correct); background: #0d1f17; color: var(--correct); }
+  .match-select.wrong { border-color: var(--wrong); background: #1f0d0d; color: var(--wrong); }
+
+  .match-desc {
+    flex: 1;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* SUBMIT */
+  .submit-section {
+    text-align: center;
+    margin-top: 60px;
+    padding: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  }
+
+  .submit-btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    padding: 16px 48px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+
+  .submit-btn:hover {
+    background: #00ffb3;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,229,160,0.3);
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+    transform: none;
+  }
+
+  .reset-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 8px;
+    padding: 12px 32px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: all 0.2s;
+  }
+
+  .reset-btn:hover { border-color: var(--warn); color: var(--warn); }
+
+  .results-display {
+    display: none;
+    margin-top: 28px;
+  }
+
+  .results-display.show { display: block; }
+
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-top: 20px;
+  }
+
+  .result-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+  }
+
+  .result-card .val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .result-card .lbl {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .grade-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #000;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 36px;
+    font-weight: 700;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    line-height: 80px;
+    margin: 16px auto;
+  }
+
+  /* Feedback icons */
+  .chk { display: inline-block; margin-left: 8px; }
+
+  @media (max-width: 600px) {
+    .exam-header { flex-wrap: wrap; }
+    .progress-bar-wrap { display: none; }
+    .id-item { flex-wrap: wrap; }
+    .id-input { width: 100%; }
+    .tf-item { flex-wrap: wrap; }
+    .tf-buttons { width: 100%; }
   }
 </style>
 </head>
 <body>
-<div class="wrapper">
 
-  <header>
-    <div class="badge">IT-IAS02 · Quick Reference</div>
-    <h1>IT Security <span>Review</span></h1>
-    <p>// CIA Triad · OS Utilities · Network Scanning · Attacks · Redundancy · Wireless Security · Policy Development</p>
-  </header>
-
-  <!-- ===== SECTION 1: OS UTILITIES ===== -->
-  <div class="section s1">
-    <div class="section-header">
-      <span class="section-num">01</span>
-      <span class="section-title">Operating System Utilities</span>
-      <div class="section-line"></div>
-    </div>
-
-    <!-- Overview -->
-    <div style="margin-bottom:0.75rem;">
-      <div class="section-header">
-        <span class="section-num" style="border-color:#4fffb0;color:#4fffb0;">OVERVIEW</span>
-        <span class="section-title" style="color:#4fffb0;">What Are OS Utilities?</span>
-        <div class="section-line"></div>
-      </div>
-    </div>
-    <div class="grid" style="margin-bottom:1.25rem;">
-      <div class="card"><div class="term">OS Utilities</div><div class="def">Built-in tools provided by an OS (Windows, Linux, macOS) that help users and administrators manage, maintain, diagnose, and troubleshoot the computer system. They are not regular apps — they work close to the OS and hardware.</div></div>
-      <div class="card"><div class="term">ip (Linux)</div><div class="def">Linux command used to display and manage IP addresses, routes, and network interfaces. The modern replacement for older ifconfig.</div></div>
-      <div class="card"><div class="term">netstat</div><div class="def">Displays active network connections, open ports, and protocol statistics on a host. Useful for spotting unusual connections.</div></div>
-      <div class="card"><div class="term">nslookup</div><div class="def">DNS query tool used to look up IP addresses or domain names from a DNS server. Helps verify DNS functionality.</div></div>
-    </div>
-
-    <!-- PING -->
-    <div style="margin-bottom:0.75rem;">
-      <div class="section-header">
-        <span class="section-num" style="border-color:#4fffb0;color:#4fffb0;">PING</span>
-        <span class="section-title" style="color:#4fffb0;">Ping — Network Diagnostic Utility</span>
-        <div class="section-line"></div>
-      </div>
-    </div>
-    <div class="grid" style="margin-bottom:0.75rem;">
-      <div class="card"><div class="term">ping</div><div class="def">A network diagnostic utility used to test connectivity between nodes on a network. Uses ICMP (Internet Control Message Protocol) to send Echo Request packets and receive Echo Reply packets.</div></div>
-      <div class="card"><div class="term">ICMP (Internet Control Message Protocol)</div><div class="def">The protocol ping uses. Ping sends ICMP Echo Request packets to a target; a successful ICMP Echo Reply confirms the device is reachable and IP-addressed.</div></div>
-      <div class="card"><div class="term">Ping — Check Reachability</div><div class="def">Sends ICMP Echo Requests to another device. If a reply comes back, the device is connected and alive on the network.</div></div>
-      <div class="card"><div class="term">Ping — Verify DNS</div><div class="def">Ping can use domain names (e.g., ping google.com). If ping fails to reach the IP but still resolves the domain name to an IP, DNS is working — the problem is elsewhere (routing or firewall).</div></div>
-      <div class="card"><div class="term">Ping — Detect Routing Problems</div><div class="def">If ping times out or returns "unreachable," it may indicate a routing issue, a firewall blocking ICMP, or a misconfigured network path.</div></div>
-      <div class="card"><div class="term">Ping — Measure Latency</div><div class="def">Ping shows the round-trip time (in ms) for packets to travel to the destination and back — used to measure network response time.</div></div>
-      <div class="card"><div class="term">Ping: Windows vs Linux</div><div class="def">Windows: sends 4 echo requests then stops automatically (use -t to run continuously; Ctrl+C to stop). Linux: runs continuously by default (Ctrl+C to stop).</div></div>
-    </div>
-    <div style="margin-top:0.75rem;margin-bottom:1.25rem;">
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Switch</th><th>What It Does</th></tr></thead>
-          <tbody>
-            <tr><td>-a</td><td>Resolve IP addresses to hostnames</td></tr>
-            <tr><td>-f</td><td>Set Don't Fragment flag (IPv4 only)</td></tr>
-            <tr><td>-4</td><td>Force use of IPv4</td></tr>
-            <tr><td>-6</td><td>Force use of IPv6</td></tr>
-            <tr><td>-t <span style="color:#64748b;font-weight:400;">(Windows)</span></td><td>Ping continuously until stopped with Ctrl+C</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- IPCONFIG -->
-    <div style="margin-bottom:0.75rem;">
-      <div class="section-header">
-        <span class="section-num" style="border-color:#4fffb0;color:#4fffb0;">IPCONFIG</span>
-        <span class="section-title" style="color:#4fffb0;">IPConfig — Windows Network Settings Tool</span>
-        <div class="section-line"></div>
-      </div>
-    </div>
-    <div class="grid" style="margin-bottom:0.75rem;">
-      <div class="card"><div class="term">ipconfig</div><div class="def">A Windows-only command (not Mac or Linux) that displays the current state of the host system's network settings — IP address, subnet mask, and default gateway. Used to troubleshoot and manage IP and Ethernet configurations.</div></div>
-      <div class="card"><div class="term">IP Address</div><div class="def">Shown by ipconfig — the unique logical address assigned to your computer on the network.</div></div>
-      <div class="card"><div class="term">Subnet Mask</div><div class="def">Shown by ipconfig — defines which part of the IP address identifies the network vs. the host.</div></div>
-      <div class="card"><div class="term">Default Gateway</div><div class="def">Shown by ipconfig — the router's IP address that your computer sends traffic to when communicating outside the local network.</div></div>
-    </div>
-    <div style="margin-top:0.75rem;margin-bottom:1.25rem;">
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Switch</th><th>Command</th><th>What It Does</th></tr></thead>
-          <tbody>
-            <tr><td>/all</td><td>ipconfig /all</td><td>Shows ALL network info — IP, MAC address, DNS, DHCP details</td></tr>
-            <tr><td>/renew</td><td>ipconfig /renew</td><td>Asks the network for a new IP address (refresh/renew IP from DHCP)</td></tr>
-            <tr><td>/release</td><td>ipconfig /release</td><td>Gives up / releases the current IP address back to DHCP</td></tr>
-            <tr><td>/flushdns</td><td>ipconfig /flushdns</td><td>Clears the computer's DNS cache (forces fresh DNS lookups)</td></tr>
-            <tr><td>/displaydns</td><td>ipconfig /displaydns</td><td>Shows the list of websites/domains your computer currently remembers in DNS cache</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ARP -->
-    <div style="margin-bottom:0.75rem;">
-      <div class="section-header">
-        <span class="section-num" style="border-color:#4fffb0;color:#4fffb0;">ARP</span>
-        <span class="section-title" style="color:#4fffb0;">ARP — Address Resolution Protocol</span>
-        <div class="section-line"></div>
-      </div>
-    </div>
-    <div class="grid" style="margin-bottom:0.75rem;">
-      <div class="card"><div class="term">arp</div><div class="def">A network protocol used to map IP addresses to MAC (hardware) addresses on a local network. Your computer uses ARP to find out the MAC address of a device it only knows the IP of.</div></div>
-      <div class="card"><div class="term">How ARP Works</div><div class="def">Your computer knows the target IP → broadcasts "Who has this IP?" to the network → the matching device replies with its MAC address → your computer saves this mapping in the ARP cache for future use.</div></div>
-      <div class="card"><div class="term">ARP Cache</div><div class="def">A local table stored on your computer that maps known IP addresses to their MAC addresses — so ARP doesn't have to broadcast the same question repeatedly.</div></div>
-      <div class="card"><div class="term">MAC Address</div><div class="def">The hardware (physical) address burned into a network interface card. ARP bridges the gap between IP addresses (logical) and MAC addresses (physical) on the local network.</div></div>
-    </div>
-    <div style="margin-top:0.75rem;margin-bottom:1.25rem;">
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Switch</th><th>Command Example</th><th>What It Does</th></tr></thead>
-          <tbody>
-            <tr><td>-a</td><td>arp -a</td><td>Displays the current ARP cache (full IP ↔ MAC mapping list)</td></tr>
-            <tr><td>-v</td><td>arp -v</td><td>Displays more detailed info about ARP entries (rarely used)</td></tr>
-            <tr><td>-d</td><td>arp -d 192.168.1.10</td><td>Deletes the ARP cache entry for a specific IP address</td></tr>
-            <tr><td>-s</td><td>arp -s 192.168.1.20 11-22-33-44-55-66</td><td>Adds a static (manual) entry to the ARP cache</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+<div class="exam-header">
+  <div>
+    <div class="exam-title">MIDTERM · IT IAS 02</div>
+    <div class="exam-subtitle">Information Assurance & Security</div>
   </div>
-
-  <!-- ===== SECTION 2: NETWORK SCANNING & ANALYSIS ===== -->
-  <div class="section s2">
-    <div class="section-header">
-      <span class="section-num">02</span>
-      <span class="section-title">Network Scanning &amp; Analysis</span>
-      <div class="section-line"></div>
-    </div>
-    <div class="grid">
-      <div class="card"><div class="term">Network Scanner</div><div class="def">An inventory tool that queries hosts on a LAN using TCP/IP protocols to discover IP addresses, MAC addresses, open ports, and OS information.</div></div>
-      <div class="card"><div class="term">Baseline</div><div class="def">A network asset verification that documents every device (servers, printers, routers, switches, WAPs) on the network — the "official" inventory.</div></div>
-      <div class="card"><div class="term">Simple Scanner</div><div class="def">Fast, lightweight scanner (e.g., Angry IP Scanner) that does basic ping-based scans and needs minimal resources.</div></div>
-      <div class="card"><div class="term">Powerful Scanner</div><div class="def">A scanner using multiple protocols to dig deeply into a network and return large amounts of detailed data.</div></div>
-      <div class="card"><div class="term">Protocol Analyzer</div><div class="def">Hardware or software that captures and analyzes network traffic; also called a packet analyzer. Used to inventory and inspect Ethernet frames and IP packets.</div></div>
-      <div class="card"><div class="term">Wireshark</div><div class="def">The most popular open-source packet analyzer (originally Ethereal, 1998). Shows three panes: frame list, frame details, and raw hex data.</div></div>
-      <div class="card"><div class="term">TShark</div><div class="def">Command-line version of Wireshark; captures packets to a .pcap file without a GUI — ideal for scheduled/overnight captures.</div></div>
-      <div class="card"><div class="term">SNMP</div><div class="def">Simple Network Management Protocol; used by network devices to send performance and security event data for monitoring.</div></div>
-      <div class="card"><div class="term">SIEM</div><div class="def">Security Information and Event Management; system that collects, correlates, and analyzes log data from multiple network sources to detect security incidents.</div></div>
-      <div class="card"><div class="term">Event Log</div><div class="def">Windows OS-generated logs (called syslogs or machine logs in Linux) recording system and application activity.</div></div>
-      <div class="card"><div class="term">Audit Log</div><div class="def">Security or audit trails stored by the OS; also called audit trails — used by security professionals to trace security-related events.</div></div>
-      <div class="card"><div class="term">Log Analysis</div><div class="def">Reviewing log files to find specific security events and correlate them into a pattern that indicates a problem over a time frame.</div></div>
-      <div class="card"><div class="term">Centralized Log Management</div><div class="def">Automatically collects and sends log files from multiple machines to a central server for easier review.</div></div>
-      <div class="card"><div class="term">Decentralized Log Management</div><div class="def">Admin manually visits each host to collect and review logs — common in small networks or disconnected segments.</div></div>
-    </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-inner" id="progressBar" style="width:0%"></div>
   </div>
-
-  <!-- ===== SECTION 3: ATTACKS SYSTEM ===== -->
-  <div class="section s3">
-    <div class="section-header">
-      <span class="section-num">03</span>
-      <span class="section-title">Attacks System</span>
-      <div class="section-line"></div>
-    </div>
-    <div class="grid">
-      <div class="card"><div class="term">Man-in-the-Middle (MitM)</div><div class="def">Attacker secretly intercepts communication between two parties, often targeting apps with weak or no authentication.</div></div>
-      <div class="card"><div class="term">Zero-Day Attack</div><div class="def">An attack exploiting a previously unknown and unpatched vulnerability before developers can release a fix.</div></div>
-      <div class="card"><div class="term">Privilege Escalation</div><div class="def">Attacker gains higher-level access than originally authorized, often using a low-level or service account to reach admin-level control.</div></div>
-      <div class="card"><div class="term">IP Spoofing</div><div class="def">Replacing a legitimate IP address with a fake one to disguise the attacker's identity or impersonate another host.</div></div>
-      <div class="card"><div class="term">MAC Spoofing</div><div class="def">Same concept as IP spoofing, but targeting MAC addresses to impersonate a trusted device on the network.</div></div>
-      <div class="card"><div class="term">ARP Poisoning</div><div class="def">Flooding the network with fake ARP replies to corrupt ARP tables, redirecting traffic through the attacker's machine.</div></div>
-      <div class="card"><div class="term">DoS (Denial of Service)</div><div class="def">Attack that overwhelms a program, OS, or server with traffic or requests to shut it down and deny access to legitimate users.</div></div>
-      <div class="card"><div class="term">Refactoring (Malicious)</div><div class="def">Modifying the internals of software (e.g., a driver) without changing its visible behavior — used to sneak in malicious code.</div></div>
-      <div class="card"><div class="term">Shimming</div><div class="def">Inserting a malicious library (shim) between the OS and a driver to intercept and manipulate data without replacing the signed driver.</div></div>
-      <div class="card"><div class="term">Virus</div><div class="def">Malware that requires a user action to spread (e.g., opening an infected file). Can infect directories or boot sectors.</div></div>
-      <div class="card"><div class="term">Crypto-malware / Ransomware</div><div class="def">Uses cryptography to lock a user out of their device and demands payment to decrypt it.</div></div>
-      <div class="card"><div class="term">Worm</div><div class="def">Self-replicating malware that spreads automatically across a network with little or no user interaction.</div></div>
-      <div class="card"><div class="term">Trojan Horse</div><div class="def">Malware disguised as a legitimate program (game, utility). Typically tries to harvest personal data from the victim.</div></div>
-      <div class="card"><div class="term">Rootkit</div><div class="def">Malware that infects core OS files, hides itself from antivirus tools, and can conceal other malware on the host.</div></div>
-      <div class="card"><div class="term">Keylogger</div><div class="def">Records every keystroke and sends them to an attacker. Symptoms include slowdowns and unusual network traffic.</div></div>
-      <div class="card"><div class="term">Adware</div><div class="def">Malware that displays unwanted pop-up ads, often to drive the user to visit a site or buy a product.</div></div>
-      <div class="card"><div class="term">Spyware</div><div class="def">Secretly monitors user activity and sends data back to the attacker without the victim's knowledge.</div></div>
-      <div class="card"><div class="term">Botnet</div><div class="def">A network of malware-infected computers (bots) controlled remotely to launch large-scale attacks on systems or networks.</div></div>
-      <div class="card"><div class="term">Logic Bomb</div><div class="def">Malicious script set to execute at a specific time or when certain conditions are met (e.g., a scheduled task).</div></div>
-      <div class="card"><div class="term">Backdoor</div><div class="def">An unauthorized hidden entry point into software, often left during development, that bypasses normal authentication.</div></div>
-      <div class="card"><div class="term">RAT (Remote Admin Tool)</div><div class="def">Software that gives an attacker remote access to a victim's computer; commonly used as part of a botnet.</div></div>
-      <div class="card"><div class="term">Bluejacking</div><div class="def">Sending unsolicited messages (texts, images) to a nearby Bluetooth-enabled device.</div></div>
-      <div class="card"><div class="term">Bluesnarfing</div><div class="def">Attacker steals data from a victim's device by connecting to it via Bluetooth without authorization.</div></div>
-    </div>
+  <div class="score-pill">
+    <span class="score-label">SCORE</span>
+    <span id="liveScore">—</span>
   </div>
-
-  <!-- ===== SECTION 4: STRENGTHENING REDUNDANCY & AVAILABILITY ===== -->
-  <div class="section s4">
-    <div class="section-header">
-      <span class="section-num">04</span>
-      <span class="section-title">Strengthening Redundancy &amp; Availability</span>
-      <div class="section-line"></div>
-    </div>
-    <div class="grid">
-      <div class="card"><div class="term">Non-persistence</div><div class="def">A system design strategy where changes (including from attacks) are rolled back instead of persisting — via snapshots, rollbacks, or live boot.</div></div>
-      <div class="card"><div class="term">Snapshot</div><div class="def">A saved state of a VM at a specific point in time; allows rollback to that state if the system is compromised or corrupted.</div></div>
-      <div class="card"><div class="term">Revert / Rollback</div><div class="def">Returning an OS to a previously saved state (restore point in Windows) to undo damage from an attack or bad update.</div></div>
-      <div class="card"><div class="term">Live Boot Media</div><div class="def">A bootable OS on removable media (e.g., Kali Linux USB) that runs independently — no hard drive required on the host.</div></div>
-      <div class="card"><div class="term">Redundancy</div><div class="def">Having duplicate systems, storage, or network paths so a failure in one does not stop overall operations.</div></div>
-      <div class="card"><div class="term">RAID</div><div class="def">Redundant Array of Independent Disks — spreads data across multiple drives for fault tolerance and/or performance.</div></div>
-      <div class="card"><div class="term">Striping</div><div class="def">Writing pieces of data across two or more physical disks simultaneously for faster read/write speeds (no redundancy by itself).</div></div>
-      <div class="card"><div class="term">Mirroring</div><div class="def">Duplicating data exactly on two disks so if one fails, the other has a complete copy (full redundancy, uses double space).</div></div>
-      <div class="card"><div class="term">Parity</div><div class="def">Extra data stored across disks that allows the array to reconstruct a failed drive's data without keeping a full mirror copy.</div></div>
-      <div class="card"><div class="term">Load Balancing</div><div class="def">Distributes incoming requests across multiple servers so no single server is overwhelmed; increases performance and availability.</div></div>
-      <div class="card"><div class="term">Clustering</div><div class="def">Running multiple identically-configured servers together; if one fails, the others continue operating without user interruption (fault tolerance).</div></div>
-      <div class="card"><div class="term">Elasticity</div><div class="def">Ability to automatically add or remove server instances based on current demand (used in virtualization/cloud environments).</div></div>
-      <div class="card"><div class="term">EMI (Electromagnetic Interference)</div><div class="def">When one device's electromagnetic field disrupts another — causes slow data transmission but rarely destroys hardware.</div></div>
-      <div class="card"><div class="term">EMP (Electromagnetic Pulse)</div><div class="def">A burst of electrical energy through the air that can permanently destroy unprotected electronic circuits and computer components.</div></div>
-      <div class="card"><div class="term">RFI (Radio Frequency Interference)</div><div class="def">EMI that operates in the radio frequency range (e.g., 802.11 and cellular bands); typically disrupts other radio sources.</div></div>
-      <div class="card"><div class="term">TPM (Trusted Platform Module)</div><div class="def">A chip on modern computers that stores cryptographic keys and verifies system integrity during boot to ensure firmware hasn't been tampered with.</div></div>
-      <div class="card"><div class="term">BitLocker</div><div class="def">Windows Pro's Full Disk Encryption (FDE) tool; uses TPM to encrypt the entire drive so data is unreadable without proper authentication.</div></div>
-      <div class="card"><div class="term">SED (Self-Encrypting Drive)</div><div class="def">A drive with built-in circuitry that automatically encrypts and decrypts all data — no software FDE tool needed.</div></div>
-      <div class="card"><div class="term">HSM (Hardware Security Module)</div><div class="def">A dedicated hardware device that performs cryptographic operations hundreds of times faster than a standard CPU — used for key management.</div></div>
-      <div class="card"><div class="term">DMZ (Demilitarized Zone)</div><div class="def">A separate network segment between the public internet and internal LAN, hosting public-facing servers (web, email) to limit exposure of internal systems.</div></div>
-      <div class="card"><div class="term">NAT (Network Address Translation)</div><div class="def">Maps private internal IP addresses to one or more public IPs, hiding internal network structure and conserving public IP space.</div></div>
-      <div class="card"><div class="term">VLAN (Virtual LAN)</div><div class="def">Logically separates hosts on the same physical switch into isolated broadcast domains — improves security and reduces unnecessary traffic.</div></div>
-      <div class="card"><div class="term">NAC (Network Access Control)</div><div class="def">Checks a device's health/security settings before allowing it onto the network — can use agents or be agentless.</div></div>
-      <div class="card"><div class="term">Patch Management</div><div class="def">A formal process of testing and applying OS/software updates to fix vulnerabilities — should be tested on systems before enterprise-wide deployment.</div></div>
-    </div>
-
-    <div style="margin-top:1.25rem;">
-      <div class="section-header">
-        <span class="section-num" style="border-color:#ffd166;color:#ffd166;">RAID</span>
-        <span class="section-title" style="color:#ffd166;">RAID Levels at a Glance</span>
-        <div class="section-line"></div>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>Level</th><th>Name</th><th>Method</th><th>Min Drives</th><th>Notes</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>RAID 0</td><td>Striping</td><td>Striping only</td><td>2</td><td>Speed only — NO redundancy</td></tr>
-            <tr><td>RAID 1</td><td>Mirroring</td><td>Mirroring only</td><td>2</td><td>Full redundancy — wastes half the space</td></tr>
-            <tr><td>RAID 5</td><td>Striping + Parity</td><td>Stripe + distributed parity</td><td>3</td><td>Survives 1 drive failure</td></tr>
-            <tr><td>RAID 6</td><td>Double Parity</td><td>Stripe + double parity</td><td>4</td><td>Survives 2 drive failures</td></tr>
-            <tr><td>RAID 1+0</td><td>Mirror + Stripe</td><td>Stripe of mirrored pairs</td><td>4</td><td>Speed + redundancy</td></tr>
-            <tr><td>RAID 0+1</td><td>Stripe + Mirror</td><td>Mirror of striped arrays</td><td>4</td><td>Speed + redundancy</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== SECTION 5: INFORMATION SECURITY FUNDAMENTALS ===== -->
-  <div class="section s5">
-    <div class="section-header">
-      <span class="section-num">05</span>
-      <span class="section-title">Information Security Fundamentals</span>
-      <div class="section-line"></div>
-    </div>
-
-    <!-- Core Concepts sub-header -->
-    <div style="margin-bottom:0.75rem;">
-      <div class="section-header">
-        <span class="section-num" style="border-color:#c084fc;color:#c084fc;">CORE</span>
-        <span class="section-title" style="color:#c084fc;">Core Concepts &amp; CIA Triad</span>
-        <div class="section-line"></div>
-      </div>
-    </div>
-    <div class="grid" style="margin-bottom:1.25rem;">
-      <div class="card"><div class="term">Data</div><div class="def">Raw, unorganized facts — numbers, text, symbols — that have no meaning on their own until they are processed. Example: 90, 85, 88.</div></div>
-      <div class="card"><div class="term">Information</div><div class="def">Processed data that has meaning and value. Example: "Average grade is 87.6" derived from the raw scores 90, 85, 88.</div></div>
-      <div class="card"><div class="term">Information Security</div><div class="def">The practice of protecting information from unauthorized access, use, disclosure, disruption, modification, or destruction — protecting data from being seen by the wrong people, changed, or lost.</div></div>
-      <div class="card"><div class="term">Information Value</div><div class="def">How important or sensitive data is to an individual or organization. Higher value means higher protection is needed. Example: public posts = low value; passwords and bank details = high value.</div></div>
-      <div class="card"><div class="term">Public Information</div><div class="def">Data classified as accessible to everyone — requires the least security protection.</div></div>
-      <div class="card"><div class="term">Private Information</div><div class="def">Data with limited access — not meant for public disclosure and requires moderate protection.</div></div>
-      <div class="card"><div class="term">Confidential Information</div><div class="def">Highly restricted data — requires the strongest security controls to prevent unauthorized access.</div></div>
-      <div class="card"><div class="term">Information Security Model</div><div class="def">A structured framework used to guide how information is protected — organizes security strategies and provides a systematic approach.</div></div>
-      <div class="card"><div class="term">CIA Triad</div><div class="def">The core model of Information Security consisting of three fundamental principles: Confidentiality, Integrity, and Availability.</div></div>
-      <div class="card"><div class="term">Confidentiality (CIA)</div><div class="def">Ensures that information is accessible only to authorized users. Methods include passwords, encryption, and access control.</div></div>
-      <div class="card"><div class="term">Integrity (CIA)</div><div class="def">Ensures that information is accurate, complete, and not altered without authorization. Examples: grades not changed, files not corrupted.</div></div>
-      <div class="card"><div class="term">Availability (CIA)</div><div class="def">Ensures that information and systems are accessible when needed by authorized users. Examples: websites staying online, systems working properly.</div></div>
-      <div class="card"><div class="term">Authentication</div><div class="def">Verifying the identity of a user or system — answering "Who are you?" Example: username and password login.</div></div>
-      <div class="card"><div class="term">Authorization</div><div class="def">Determining what an authenticated user is allowed to do. Example: Admin vs. Student permissions on a system.</div></div>
-      <div class="card"><div class="term">Non-repudiation</div><div class="def">Ensuring that an action or transaction cannot be denied after the fact. Example: system logs that record and prove who did what.</div></div>
-      <div class="card"><div class="term">Components of InfoSec (People)</div><div class="def">Users and individuals involved in handling and protecting information — one of the three main components of Information Security.</div></div>
-      <div class="card"><div class="term">Components of InfoSec (Processes)</div><div class="def">Rules and procedures that govern how information is managed and protected — one of the three main components of Information Security.</div></div>
-      <div class="card"><div class="term">Components of InfoSec (Technology)</div><div class="def">Hardware and software tools used to enforce security — one of the three main components of Information Security.</div></div>
-      <div class="card"><div class="term">Security Lifecycle</div><div class="def">A four-phase model describing how organizations handle threats: Protect (prevent attacks) → Detect (identify threats) → React (respond to incidents) → Recover (restore systems).</div></div>
-      <div class="card"><div class="term">Why InfoSec Matters</div><div class="def">Information security protects personal and sensitive data, prevents financial loss, maintains trust in systems, and ensures continuous operations.</div></div>
-      <div class="card"><div class="term">Goals of InfoSec</div><div class="def">Three goals: protect data from threats (safety of data), ensure systems function properly (reliability of systems), and prevent unauthorized access (controlled access).</div></div>
-      <div class="card"><div class="term">InfoSec Success Factors</div><div class="def">Success in Information Security depends on: user awareness, strong policies, updated systems, and continuous monitoring.</div></div>
-    </div>
-
-    <!-- Network Security sub-header -->
-    <div style="margin-bottom:0.75rem;">
-      <div class="section-header">
-        <span class="section-num" style="border-color:#c084fc;color:#c084fc;">NET</span>
-        <span class="section-title" style="color:#c084fc;">Network Security &amp; Access Controls</span>
-        <div class="section-line"></div>
-      </div>
-    </div>
-    <div class="grid">
-      <div class="card"><div class="term">Firewall</div><div class="def">Device or software that inspects IP packets and filters them based on rules (port, IP, protocol, time) to block unauthorized traffic.</div></div>
-      <div class="card"><div class="term">Stateless Firewall</div><div class="def">Oldest firewall type (packet filter); uses an ACL to block/allow packets based on fixed criteria without tracking connection state.</div></div>
-      <div class="card"><div class="term">Stateful Firewall</div><div class="def">Tracks the state of connections (e.g., TCP handshake) and only allows packets that are part of an established, legitimate session.</div></div>
-      <div class="card"><div class="term">Proxy Server</div><div class="def">An intermediary that accepts client requests, processes them, and forwards them to servers — used to enforce policies and hide internal systems.</div></div>
-      <div class="card"><div class="term">Forward Proxy</div><div class="def">Sits between clients and the internet; enforces outbound access policies (e.g., blocking URLs or limiting hours).</div></div>
-      <div class="card"><div class="term">Reverse Proxy</div><div class="def">Sits in front of servers; filters incoming requests to protect servers from attacks before forwarding good traffic.</div></div>
-      <div class="card"><div class="term">Implicit Denial</div><div class="def">ACL default behavior — unless a rule explicitly allows traffic, it is blocked. "Deny all unless permitted."</div></div>
-      <div class="card"><div class="term">HIDS</div><div class="def">Host-Based Intrusion Detection System — detects intrusions on a host and reports them (does not block).</div></div>
-      <div class="card"><div class="term">HIPS</div><div class="def">Host-Based Intrusion Prevention System — actively blocks detected intrusions, not just reporting them.</div></div>
-      <div class="card"><div class="term">Anti-malware</div><div class="def">Modern security software with real-time scanning of incoming data, checking for known malware signatures in emails and web traffic.</div></div>
-      <div class="card"><div class="term">DEP (Data Execution Prevention)</div><div class="def">Windows feature using the CPU's NX bit to prevent code from running in data-only memory areas — stops buffer overflow exploits.</div></div>
-      <div class="card"><div class="term">File Integrity Check</div><div class="def">Verifies that files haven't been tampered with by comparing hashes, timestamps, version numbers, and digital signatures against known-good values.</div></div>
-      <div class="card"><div class="term">DLP (Data Loss Prevention)</div><div class="def">Tools that monitor and control data movement to ensure sensitive data isn't copied, moved, or leaked outside the organization.</div></div>
-      <div class="card"><div class="term">Application Whitelisting</div><div class="def">Only pre-approved applications are allowed to run or install on a system — everything else is blocked by default.</div></div>
-      <div class="card"><div class="term">Application Blacklisting</div><div class="def">Identified dangerous or unwanted applications are blocked; everything not on the list is allowed.</div></div>
-      <div class="card"><div class="term">Trusted OS</div><div class="def">An OS designed and certified for high-security environments (e.g., SE Linux, Trusted Solaris, Trusted AIX, Windows 10).</div></div>
-      <div class="card"><div class="term">Clear (Data Sanitation)</div><div class="def">Overwriting storage media using built-in device commands or disk wiping utilities (e.g., single overwrite with binary zeros).</div></div>
-      <div class="card"><div class="term">Purge (Data Sanitation)</div><div class="def">Destroying data using methods beyond basic commands — degaussing (for HDDs only) or eliminating encryption keys on encrypted media.</div></div>
-      <div class="card"><div class="term">Destroy (Data Sanitation)</div><div class="def">Physically destroying the storage media itself — the most thorough method; professional shredding/destruction services available.</div></div>
-      <div class="card"><div class="term">WEP</div><div class="def">Wired Equivalent Privacy — first 802.11 wireless security standard; uses RC4 but was mathematically broken within years. Now obsolete.</div></div>
-      <div class="card"><div class="term">WPA</div><div class="def">Wi-Fi Protected Access (2003); improved on WEP with larger, dynamic keys using TKIP. Has Personal (PSK) and Enterprise (RADIUS) modes.</div></div>
-      <div class="card"><div class="term">WPA2</div><div class="def">Final implementation of IEEE 802.11i; uses AES/CCMP encryption — the strongest standard for most current networks.</div></div>
-      <div class="card"><div class="term">AES</div><div class="def">Advanced Encryption Standard; uses the Rijndael algorithm with 128-bit keys and block size — the encryption method in WPA2 (via CCMP).</div></div>
-      <div class="card"><div class="term">TKIP</div><div class="def">Temporal Key Integrity Protocol; WPA's dynamic per-packet key generation system using RC4 — adds randomness to prevent key reuse.</div></div>
-      <div class="card"><div class="term">RC4</div><div class="def">Stream cipher used in WEP and WPA; strong on its own but WEP's poor implementation (weak IVs, static keys) made it exploitable.</div></div>
-      <div class="card"><div class="term">WPS</div><div class="def">Wi-Fi Protected Setup; lets devices connect via a button push, but its 8-digit PIN (only ~11,000 combinations) is easily brute-forced.</div></div>
-      <div class="card"><div class="term">802.1X</div><div class="def">Port-based network access control framework supporting multiple authentication protocols — used in enterprise wired and wireless networks.</div></div>
-      <div class="card"><div class="term">EAP</div><div class="def">Extensible Authentication Protocol; a flexible authentication framework (not a single protocol) supporting certificates, smart cards, and username/password.</div></div>
-      <div class="card"><div class="term">EAP-TLS</div><div class="def">Most secure EAP variant; requires digital certificates on both client and server sides for mutual authentication.</div></div>
-      <div class="card"><div class="term">EAP-TTLS</div><div class="def">Adds a TLS tunnel for protection; only requires a server-side certificate (not client-side).</div></div>
-      <div class="card"><div class="term">PEAP</div><div class="def">Protected EAP; creates a TLS tunnel using a server-side certificate, then authenticates the client inside the tunnel.</div></div>
-      <div class="card"><div class="term">LEAP</div><div class="def">Lightweight EAP — a Cisco proprietary protocol using dynamic WEP keys and RADIUS. Now replaced by EAP-FAST due to security flaws.</div></div>
-      <div class="card"><div class="term">EAP-FAST</div><div class="def">Cisco's replacement for LEAP; uses TLS tunnels for secure, lightweight authentication.</div></div>
-      <div class="card"><div class="term">Rogue Access Point</div><div class="def">A fake WAP set up by an attacker to lure users into connecting — all their traffic is then intercepted and monitored.</div></div>
-      <div class="card"><div class="term">Evil Twin Attack</div><div class="def">A variant of the rogue AP attack where the attacker's AP uses the same (or similar) SSID as the legitimate network.</div></div>
-      <div class="card"><div class="term">Deauthentication Attack</div><div class="def">Forcing a wireless client to disconnect from the WAP so it must reconnect — allowing the attacker to capture the handshake for cracking.</div></div>
-      <div class="card"><div class="term">Replay Attack</div><div class="def">Intercepting credentials or data and retransmitting them later to impersonate the victim — effective against plain-text or weakly encrypted traffic.</div></div>
-      <div class="card"><div class="term">NFC (Near Field Communication)</div><div class="def">Short-range radio communication (using RFID) that requires devices to be very close or touching — vulnerable to relay, MitM, and jamming attacks.</div></div>
-      <div class="card"><div class="term">Packet Sniffing</div><div class="def">Capturing and reading unencrypted wireless or wired network traffic — requires a NIC in promiscuous mode and tools like Wireshark.</div></div>
-      <div class="card"><div class="term">Jamming</div><div class="def">Intentional DoS attack on wireless networks — overwhelms the radio signal to prevent legitimate devices from communicating.</div></div>
-      <div class="card"><div class="term">SSID Broadcasting</div><div class="def">A WAP advertising its network name so devices can find it. Disabling it (cloaking) adds minor obscurity but is not a real security control.</div></div>
-      <div class="card"><div class="term">MAC Filtering</div><div class="def">Restricting wireless access to only approved MAC addresses. Easy to bypass via MAC spoofing — not a standalone security measure.</div></div>
-      <div class="card"><div class="term">Captive Portal</div><div class="def">A web page that wireless users must authenticate through before they can access the network (used in hotels, enterprises, airports).</div></div>
-      <div class="card"><div class="term">Fat AP</div><div class="def">A "thick" access point with full built-in controls (ACLs, encryption settings, etc.) — each is managed individually or via a central console.</div></div>
-      <div class="card"><div class="term">Thin AP</div><div class="def">A simple repeater AP that forwards wireless signals to a centralized Access Controller (AC) which handles encryption and security.</div></div>
-      <div class="card"><div class="term">Site Survey</div><div class="def">A technical review of a wireless network's coverage, interference sources, antenna placement, and capacity — done before or during network deployment.</div></div>
-      <div class="card"><div class="term">O-TTPS</div><div class="def">Open Trustworthy Technology Vendor Standard; a framework for securing the ICT supply chain for hardware and software products.</div></div>
-      <div class="card"><div class="term">Degaussing</div><div class="def">Using a powerful magnetic field to permanently erase data on HDDs. Destroys the drive in the process; has no effect on SSDs.</div></div>
-      <div class="card"><div class="term">Flood Guard</div><div class="def">A switch/router feature that detects and stops traffic floods (used in DoS attacks) by blocking malformed or excessive traffic.</div></div>
-      <div class="card"><div class="term">STP (Spanning Tree Protocol)</div><div class="def">Standard switch protocol that prevents network loops by allowing switches to communicate and automatically block redundant paths.</div></div>
-    </div><!-- end network grid -->
-  </div><!-- end section s5 -->
-
-  <!-- ===== SECTION 6: POLICY DEVELOPMENT & AUP ===== -->
-  <div class="section s6">
-    <div class="section-header">
-      <span class="section-num">06</span>
-      <span class="section-title">Policy Development &amp; Acceptable Use Policy</span>
-      <div class="section-line"></div>
-    </div>
-
-    <!-- Core Concepts -->
-    <div style="margin-bottom:0.75rem;">
-      <div class="section-header">
-        <span class="section-num" style="border-color:#4fd1ff;color:#4fd1ff;">CORE</span>
-        <span class="section-title" style="color:#4fd1ff;">Core Policy Concepts</span>
-        <div class="section-line"></div>
-      </div>
-    </div>
-    <div class="grid" style="margin-bottom:1.25rem;">
-      <div class="card"><div class="term">Policy</div><div class="def">A formal set of rules and guidelines that govern behavior in an organization. Protects data, systems, and users from misuse or harm.</div></div>
-      <div class="card"><div class="term">Why Policies Matter</div><div class="def">Policies protect sensitive data, ensure legal and regulatory compliance, reduce organizational risk, and guide consistent user behavior.</div></div>
-      <div class="card"><div class="term">EISP (Enterprise Information Security Policy)</div><div class="def">The high-level, big-picture policy that sets the overall direction for information security. Created and endorsed by top management.</div></div>
-      <div class="card"><div class="term">ISSP (Issue-Specific Security Policy)</div><div class="def">Focuses on specific topics or issues. Examples: email usage policy, internet usage policy, BYOD (Bring Your Own Device) policy.</div></div>
-      <div class="card"><div class="term">SysSP (System-Specific Policy)</div><div class="def">Technical and detailed policy written for IT staff and system admins. Examples: firewall rules, password configurations, access control settings.</div></div>
-      <div class="card"><div class="term">Policy Types Summary</div><div class="def">EISP = Big picture (org-wide direction). ISSP = Specific rules for specific issues. SysSP = Technical instructions for IT systems.</div></div>
-    </div>
-
-    <!-- Policy Lifecycle -->
-    <div style="margin-bottom:0.75rem;">
-      <div class="section-header">
-        <span class="section-num" style="border-color:#4fd1ff;color:#4fd1ff;">LIFECYCLE</span>
-        <span class="section-title" style="color:#4fd1ff;">Policy Development Lifecycle</span>
-        <div class="section-line"></div>
-      </div>
-    </div>
-    <div class="grid" style="margin-bottom:1.25rem;">
-      <div class="card"><div class="term">1. Identify the Need</div><div class="def">Determine what problem the policy will solve. Example: repeated data breaches → need for a formal password policy.</div></div>
-      <div class="card"><div class="term">2. Research &amp; Gather Requirements</div><div class="def">Review relevant laws, standards (e.g., Data Privacy Act), industry regulations, and the organization's own operational needs.</div></div>
-      <div class="card"><div class="term">3. Draft the Policy</div><div class="def">Write the policy using clear, simple, and enforceable language. Rules must be easy to understand and follow.</div></div>
-      <div class="card"><div class="term">4. Review &amp; Approval</div><div class="def">The draft is reviewed by management, legal counsel, and IT teams. Revisions are made before formal approval.</div></div>
-      <div class="card"><div class="term">5. Implementation</div><div class="def">Communicate the approved policy to all employees and provide training so everyone understands and can comply.</div></div>
-      <div class="card"><div class="term">6. Enforcement</div><div class="def">Monitor compliance with the policy and apply consequences (warnings, suspension, termination) if it is violated.</div></div>
-      <div class="card"><div class="term">7. Review &amp; Update</div><div class="def">Policies must be periodically reviewed and updated as technology, threats, and organizational needs evolve over time.</div></div>
-      <div class="card"><div class="term">Policy as a Process</div><div class="def">Policy development is a continuous, structured lifecycle — not a one-time task. Policies require ongoing maintenance to stay effective.</div></div>
-    </div>
-
-    <!-- AUP -->
-    <div style="margin-bottom:0.75rem;">
-      <div class="section-header">
-        <span class="section-num" style="border-color:#4fd1ff;color:#4fd1ff;">AUP</span>
-        <span class="section-title" style="color:#4fd1ff;">Acceptable Use Policy (AUP)</span>
-        <div class="section-line"></div>
-      </div>
-    </div>
-    <div class="grid">
-      <div class="card"><div class="term">AUP (Acceptable Use Policy)</div><div class="def">Defines how users are allowed to use an organization's IT resources (internet, computers, systems). Establishes what is permitted and what is not.</div></div>
-      <div class="card"><div class="term">Allowed Activities</div><div class="def">AUPs typically permit work-related browsing, accessing authorized company systems, and other activities directly supporting job functions.</div></div>
-      <div class="card"><div class="term">Prohibited Activities</div><div class="def">AUPs typically ban downloading illegal content, accessing inappropriate websites, and installing unauthorized software on company systems.</div></div>
-      <div class="card"><div class="term">User Responsibilities</div><div class="def">Users must protect their passwords, log out properly from systems, and take personal accountability for actions performed under their accounts.</div></div>
-      <div class="card"><div class="term">Monitoring Statement</div><div class="def">AUPs include a notice that user activity on organizational systems may be monitored, establishing transparency and deterrence.</div></div>
-      <div class="card"><div class="term">Consequences</div><div class="def">Violations of an AUP may result in escalating consequences: warnings, suspension of system access, or termination of employment.</div></div>
-    </div>
-  </div><!-- end section s6 -->
-
-  <footer>IT-IAS02 — General de Jesus College · Compiled for review purposes only</footer>
 </div>
+
+<div class="container">
+  <div class="instruction-box">
+    📋 <strong>Instructions:</strong> Read directions carefully. Complete all sections. Click <em>Submit Exam</em> when finished to see your score and answers reviewed.
+  </div>
+
+  <!-- ══════════════════════ SECTION I ══════════════════════ -->
+  <div class="section-header">
+    <div>
+      <div class="section-num">SECTION I</div>
+      <div class="section-title">Identification</div>
+      <div class="section-desc">Identify the correct term being described. (10 pts)</div>
+    </div>
+  </div>
+
+  <div id="identSection">
+    <!-- items injected by JS -->
+  </div>
+
+  <!-- ══════════════════════ SECTION II ══════════════════════ -->
+  <div class="section-header">
+    <div>
+      <div class="section-num">SECTION II</div>
+      <div class="section-title">Multiple Choice</div>
+      <div class="section-desc">Encircle the letter of the correct answer. (30 pts)</div>
+    </div>
+  </div>
+
+  <div id="mcSection"></div>
+
+  <!-- ══════════════════════ SECTION III ══════════════════════ -->
+  <div class="section-header">
+    <div>
+      <div class="section-num">SECTION III</div>
+      <div class="section-title">True or False</div>
+      <div class="section-desc">Write T if the statement is correct, F if incorrect. (10 pts)</div>
+    </div>
+  </div>
+
+  <div id="tfSection"></div>
+
+  <!-- ══════════════════════ SECTION IV ══════════════════════ -->
+  <div class="section-header">
+    <div>
+      <div class="section-num">SECTION IV</div>
+      <div class="section-title">Matching Type</div>
+      <div class="section-desc">Select the correct answer from the bank. (17 pts)</div>
+    </div>
+  </div>
+
+  <div id="matchSection"></div>
+
+  <!-- SUBMIT -->
+  <div class="submit-section">
+    <button class="submit-btn" id="submitBtn" onclick="submitExam()">Submit Exam</button>
+    <br>
+    <button class="reset-btn" onclick="resetExam()">↺ Reset All Answers</button>
+
+    <div class="results-display" id="resultsDisplay">
+      <div class="grade-badge" id="gradeBadge"></div>
+      <div class="result-grid" id="resultGrid"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────── DATA ───────────────────
+
+const identData = [
+  { desc: "A command used to test ICMP connectivity between two hosts.", answer: "ping" },
+  { desc: "A GUI-based packet analyzer originally known as Ethereal.", answer: "wireshark" },
+  { desc: "An attack exploiting an unknown and unpatched vulnerability.", answer: "zero day attack" },
+  { desc: "The command that displays all open TCP and UDP connections and listening ports.", answer: "netstat -a" },
+  { desc: "A tool used to query DNS servers for domain information.", answer: "nslookup" },
+  { desc: "A Windows command used to display and manage IP configuration settings.", answer: "ipconfig" },
+  { desc: "An attack that corrupts MAC address mappings on a LAN.", answer: "arp poisoning" },
+  { desc: "An attack that substitutes a legitimate IP address.", answer: "ip spoofing" },
+  { desc: "The command that shows the current DNS cache contents in Windows.", answer: "ipconfig /displaydns" },
+  { desc: "A network attack that floods a system to make it unavailable.", answer: "denial of service" },
+];
+
+const mcData = [
+  { q: "Which command clears the Windows DNS cache?", opts: ["ipconfig /renew","ipconfig /release","ipconfig /displaydns","ipconfig /flushdns"], ans: 3 },
+  { q: "Which tool captures and analyzes packets with a GUI?", opts: ["netstat","Wireshark","Angry IP Scanner","nslookup"], ans: 1 },
+  { q: "In Windows, which switch makes ping continuous?", opts: ["-f","-r","-t","-a"], ans: 2 },
+  { q: "A successful ping primarily confirms:", opts: ["DNS availability","ICMP reachability","Open TCP sessions","ARP integrity"], ans: 1 },
+  { q: "Which scenario reflects horizontal privilege escalation?", opts: ["User becomes root","Guest becomes admin","User accesses another user's account","Service gains SYSTEM"], ans: 2 },
+  { q: "Drivers are attractive attack targets because they:", opts: ["Run in kernel mode","Are open source","Use HTTPS","Depend on DNS"], ans: 0 },
+  { q: "What additional information does netstat -a show?", opts: ["DNS records","Active ARP entries","Listening ports","DHCP leases"], ans: 2 },
+  { q: "Which item is NOT normally gathered during network scanning?", opts: ["Open ports","OS fingerprint","User passwords","MAC addresses"], ans: 2 },
+  { q: "Port 443 in LISTENING state usually indicates:", opts: ["FTP","HTTPS","SSH","Telnet"], ans: 1 },
+  { q: "If ping resolves a hostname but receives no reply, what is working?", opts: ["DHCP lease","DNS resolution","TCP handshake","Routing table"], ans: 1 },
+  { q: "Shimming inserts:", opts: ["Extra hardware","Encrypted headers","Intermediate code","Firewall rules"], ans: 2 },
+  { q: "Which command shows cached IP-to-MAC mappings?", opts: ["netstat -a","arp -a","ip a","route print"], ans: 1 },
+  { q: "The primary function of nslookup is to:", opts: ["Analyze packets","Scan networks","Query DNS servers","Trace routes"], ans: 2 },
+  { q: "A Man-in-the-Middle attack allows an attacker to:", opts: ["Overload bandwidth","Disable drivers","Modify communication","Reset services"], ans: 2 },
+  { q: "Which attack directly targets OS-to-hardware communication?", opts: ["SQL injection","Driver shimming","ARP spoofing","DNS poisoning"], ans: 1 },
+  { q: "The primary goal of privilege escalation is to:", opts: ["Crash services","Increase bandwidth","Gain higher rights","Modify MAC address"], ans: 2 },
+  { q: "Centralized logging mainly provides:", opts: ["Encryption","Aggregation","Isolation","Redundancy"], ans: 1 },
+  { q: "Which is an example of service misconfiguration?", opts: ["Signed driver","Writable service path","Encrypted traffic","Updated patch"], ans: 1 },
+  { q: "A buffer overflow occurs when:", opts: ["CPU overheats","Memory limit exceeded","DNS fails","Port closes"], ans: 1 },
+  { q: "Public DNS servers often restrict advanced queries to prevent:", opts: ["Congestion","Data leaks","Abuse","Spoofing"], ans: 2 },
+  { q: "Applications are often targeted first because they:", opts: ["Run in BIOS","Control routing","Interact with users","Replace firewalls"], ans: 2 },
+  { q: "ARP poisoning works by sending:", opts: ["Fake DNS replies","Modified SSL data","False MAC mappings","Forged TCP flags"], ans: 2 },
+  { q: "IP spoofing involves:", opts: ["Altering source IP","Changing DNS zones","Rewriting routing tables","Encrypting packets"], ans: 0 },
+  { q: "Malicious MAC spoofing is commonly used to:", opts: ["Speed up traffic","Encrypt packets","Bypass access controls","Renew IP address"], ans: 2 },
+  { q: "Simple LAN scanners often rely on:", opts: ["ICMP","SMTP","FTP","SNMP traps"], ans: 0 },
+  { q: "Unlimited login attempts increase risk of:", opts: ["Buffer overflow","Brute force","ARP spoofing","Refactoring"], ans: 1 },
+  { q: "A zero-day attack exploits:", opts: ["Weak passwords","Firewall errors","Known bugs","Unknown flaws"], ans: 3 },
+  { q: "A DoS attack primarily affects:", opts: ["Integrity","Availability","Confidentiality","Authentication"], ans: 1 },
+  { q: "In a DDoS attack, traffic typically comes from:", opts: ["One server","Many infected devices","Local router","DNS resolver"], ans: 1 },
+  { q: "Which best describes vertical privilege escalation?", opts: ["User accesses another user's files","Low-privilege account gains admin rights","Two admins share credentials","User modifies own password"], ans: 1 },
+];
+
+const tfData = [
+  { stmt: "Wireshark can capture unencrypted traffic, but cannot decrypt HTTPS traffic without the proper keys.", ans: true },
+  { stmt: "Privilege escalation attacks can only occur on poorly patched operating systems.", ans: false },
+  { stmt: "Drivers operate in kernel mode, making them attractive targets for attacks like shimming or refactoring.", ans: true },
+  { stmt: "A zero-day vulnerability refers to an unknown flaw that is already patched.", ans: false },
+  { stmt: "Horizontal privilege escalation allows a user to access another user's account with similar privileges.", ans: true },
+  { stmt: "The arp -a command displays both the current ARP cache and all previous ARP entries, even after reboot.", ans: false },
+  { stmt: "ICMP echo requests used by ping can be blocked by firewalls without affecting other TCP/IP communications.", ans: true },
+  { stmt: "Centralized logging guarantees complete security because it prevents tampering with log files.", ans: false },
+  { stmt: "Shimming involves modifying hardware firmware to bypass signed driver checks.", ans: false },
+  { stmt: "In Linux, ping continues indefinitely by default unless stopped manually with Ctrl-T.", ans: false },
+];
+
+const matchBank = [
+  { letter: "A", name: "Ping" },
+  { letter: "B", name: "Ipconfig" },
+  { letter: "C", name: "Ifconfig" },
+  { letter: "D", name: "Ip Command" },
+  { letter: "E", name: "ARP" },
+  { letter: "F", name: "Netstat" },
+  { letter: "G", name: "-a Switch (Ping)" },
+  { letter: "H", name: "/all" },
+  { letter: "I", name: "/flushdns" },
+  { letter: "J", name: "/renew" },
+  { letter: "K", name: "Nslookup" },
+  { letter: "L", name: "Wireshark" },
+  { letter: "M", name: "TShark" },
+  { letter: "N", name: "Network Scanner" },
+  { letter: "O", name: "Simple Scanner" },
+  { letter: "P", name: "Man-in-the-Middle Attack" },
+  { letter: "Q", name: "Zero-Day Attack" },
+  { letter: "R", name: "Denial of Service (DoS)" },
+  { letter: "S", name: "IP Spoofing" },
+  { letter: "T", name: "ARP Poisoning" },
+];
+
+const matchData = [
+  { desc: "Tool used to analyze and capture network packets.", ans: "L" },
+  { desc: "Command used to test connectivity between two TCP/IP systems using ICMP requests.", ans: "A" },
+  { desc: "Attack that overwhelms a system or network with traffic.", ans: "R" },
+  { desc: "Linux command that performs similar functions as ipconfig.", ans: "C" },
+  { desc: "Command used to view the cache of mapped IP-to-MAC addresses.", ans: "E" },
+  { desc: "Tool used to query DNS servers for domain information.", ans: "K" },
+  { desc: "Attack where a fake IP address is used to impersonate another device.", ans: "S" },
+  { desc: "Windows command that displays the current network configuration of a host.", ans: "B" },
+  { desc: "Attack that poisons a network by sending false ARP responses.", ans: "T" },
+  { desc: "Ipconfig switch that clears the DNS cache.", ans: "I" },
+  { desc: "Attack where an attacker secretly intercepts communication between two systems.", ans: "P" },
+  { desc: "Tool used to scan networks and gather information about devices.", ans: "N" },
+  { desc: "Ipconfig switch that renews the DHCP IP address lease.", ans: "J" },
+  { desc: "Command used to display TCP and UDP connections and open ports.", ans: "F" },
+  { desc: "Attack that uses a previously unknown vulnerability.", ans: "Q" },
+  { desc: "Type of network scanner that performs quick and basic scans.", ans: "O" },
+  { desc: "Ipconfig switch that displays detailed IP and Ethernet configuration.", ans: "G" },
+];
+
+// ─────────────────── RENDER ───────────────────
+
+function buildIdent() {
+  const wrap = document.getElementById('identSection');
+  identData.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'id-item';
+    div.innerHTML = `
+      <span class="id-num">${i+1}.</span>
+      <input class="id-input" type="text" placeholder="your answer..." id="id_${i}" autocomplete="off" oninput="updateProgress()">
+      <span class="id-desc">${item.desc}</span>
+      <span class="id-feedback" id="idfb_${i}"></span>
+    `;
+    wrap.appendChild(div);
+  });
+}
+
+function buildMC() {
+  const wrap = document.getElementById('mcSection');
+  mcData.forEach((item, qi) => {
+    const div = document.createElement('div');
+    div.className = 'mc-item';
+    const letters = ['A','B','C','D'];
+    const opts = item.opts.map((o, oi) => `
+      <div class="mc-option" id="mc_${qi}_${oi}" onclick="selectMC(${qi},${oi})">
+        <span class="option-letter">${letters[oi]}</span>
+        ${o}
+      </div>
+    `).join('');
+    div.innerHTML = `
+      <div class="mc-question"><span class="mc-num">${qi+1}.</span>${item.q}</div>
+      <div class="mc-options">${opts}</div>
+    `;
+    wrap.appendChild(div);
+  });
+}
+
+function buildTF() {
+  const wrap = document.getElementById('tfSection');
+  tfData.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'tf-item';
+    div.innerHTML = `
+      <span class="tf-num">${i+1}.</span>
+      <span class="tf-statement">${item.stmt}</span>
+      <div class="tf-buttons">
+        <button class="tf-btn" id="tf_${i}_T" onclick="selectTF(${i},'T')">T</button>
+        <button class="tf-btn" id="tf_${i}_F" onclick="selectTF(${i},'F')">F</button>
+      </div>
+    `;
+    wrap.appendChild(div);
+  });
+}
+
+function buildMatch() {
+  const wrap = document.getElementById('matchSection');
+  const bankDiv = document.createElement('div');
+  bankDiv.className = 'match-table';
+  const bankHTML = matchBank.map(b => `<div class="bank-item"><strong>${b.letter}.</strong>${b.name}</div>`).join('');
+  bankDiv.innerHTML = `<div class="match-bank">${bankHTML}</div>`;
+
+  matchData.forEach((item, i) => {
+    const row = document.createElement('div');
+    row.className = 'match-item';
+    const opts = matchBank.map(b => `<option value="${b.letter}">${b.letter}. ${b.name}</option>`).join('');
+    row.innerHTML = `
+      <span class="match-num">${i+1}.</span>
+      <select class="match-select" id="match_${i}" onchange="updateProgress()">
+        <option value="">— select —</option>
+        ${opts}
+      </select>
+      <span class="match-desc">${item.desc}</span>
+    `;
+    bankDiv.appendChild(row);
+  });
+  wrap.appendChild(bankDiv);
+}
+
+// ─────────────────── INTERACTION ───────────────────
+
+const mcSelected = {};
+const tfSelected = {};
+
+function selectMC(qi, oi) {
+  if (document.getElementById('submitBtn').disabled) return;
+  mcSelected[qi] = oi;
+  const letters = ['A','B','C','D'];
+  letters.forEach((_, idx) => {
+    const el = document.getElementById(`mc_${qi}_${idx}`);
+    el.classList.toggle('selected', idx === oi);
+  });
+  updateProgress();
+}
+
+function selectTF(i, val) {
+  if (document.getElementById('submitBtn').disabled) return;
+  tfSelected[i] = val;
+  const tBtn = document.getElementById(`tf_${i}_T`);
+  const fBtn = document.getElementById(`tf_${i}_F`);
+  tBtn.classList.toggle('selected-t', val === 'T');
+  fBtn.classList.toggle('selected-f', val === 'F');
+  tBtn.classList.remove('selected-f');
+  fBtn.classList.remove('selected-t');
+  updateProgress();
+}
+
+function updateProgress() {
+  let answered = 0;
+  const total = identData.length + mcData.length + tfData.length + matchData.length;
+  identData.forEach((_, i) => { if (document.getElementById(`id_${i}`).value.trim()) answered++; });
+  mcData.forEach((_, i) => { if (mcSelected[i] !== undefined) answered++; });
+  tfData.forEach((_, i) => { if (tfSelected[i]) answered++; });
+  matchData.forEach((_, i) => { const v = document.getElementById(`match_${i}`).value; if (v) answered++; });
+  document.getElementById('progressBar').style.width = `${(answered/total)*100}%`;
+}
+
+// ─────────────────── SUBMIT ───────────────────
+
+function submitExam() {
+  let score = 0;
+  const maxScore = identData.length + mcData.length + tfData.length + matchData.length;
+
+  // Score Identification
+  let identScore = 0;
+  identData.forEach((item, i) => {
+    const input = document.getElementById(`id_${i}`);
+    const fb = document.getElementById(`idfb_${i}`);
+    const userVal = input.value.trim().toLowerCase().replace(/[^a-z0-9 ]/g, '');
+    const correct = item.answer.toLowerCase().replace(/[^a-z0-9 ]/g, '');
+    const isCorrect = userVal === correct || correct.includes(userVal) && userVal.length > 3;
+    input.classList.add(isCorrect ? 'correct' : 'wrong');
+    fb.innerHTML = isCorrect ? `<span style="color:var(--correct)">✓</span>` : `<span style="color:var(--wrong)">✗ ${item.answer}</span>`;
+    if (isCorrect) { score++; identScore++; }
+    input.readOnly = true;
+  });
+
+  // Score MC
+  let mcScore = 0;
+  mcData.forEach((item, qi) => {
+    const letters = ['A','B','C','D'];
+    letters.forEach((_, oi) => {
+      const el = document.getElementById(`mc_${qi}_${oi}`);
+      el.classList.add('locked');
+      el.onclick = null;
+      if (oi === item.ans) {
+        el.classList.remove('selected');
+        el.classList.add('correct-ans');
+      } else if (mcSelected[qi] === oi && oi !== item.ans) {
+        el.classList.add('wrong-ans');
+        el.classList.remove('selected');
+      } else {
+        el.classList.remove('selected');
+      }
+    });
+    if (mcSelected[qi] === item.ans) { score++; mcScore++; }
+  });
+
+  // Score TF
+  let tfScore = 0;
+  tfData.forEach((item, i) => {
+    const correctVal = item.ans ? 'T' : 'F';
+    const userVal = tfSelected[i];
+    const isCorrect = userVal === correctVal;
+    const tBtn = document.getElementById(`tf_${i}_T`);
+    const fBtn = document.getElementById(`tf_${i}_F`);
+    tBtn.classList.remove('selected-t','selected-f');
+    fBtn.classList.remove('selected-t','selected-f');
+    tBtn.onclick = null; fBtn.onclick = null;
+    tBtn.classList.add('locked'); fBtn.classList.add('locked');
+    if (correctVal === 'T') tBtn.classList.add('correct-mark');
+    else fBtn.classList.add('correct-mark');
+    if (userVal && userVal !== correctVal) {
+      if (userVal === 'T') tBtn.classList.add('wrong-mark');
+      else fBtn.classList.add('wrong-mark');
+    }
+    if (isCorrect) { score++; tfScore++; }
+  });
+
+  // Score Match
+  let matchScore = 0;
+  matchData.forEach((item, i) => {
+    const sel = document.getElementById(`match_${i}`);
+    const isCorrect = sel.value === item.ans;
+    sel.classList.add(isCorrect ? 'correct' : 'wrong');
+    sel.disabled = true;
+    if (!isCorrect) {
+      const correctOpt = matchBank.find(b => b.letter === item.ans);
+      // show correct via title
+      sel.title = `Correct: ${item.ans}. ${correctOpt ? correctOpt.name : ''}`;
+    }
+    if (isCorrect) { score++; matchScore++; }
+  });
+
+  // Display results
+  document.getElementById('liveScore').textContent = `${score}/${maxScore}`;
+  const pct = Math.round((score/maxScore)*100);
+  const grade = pct >= 90 ? 'A' : pct >= 80 ? 'B' : pct >= 70 ? 'C' : pct >= 60 ? 'D' : 'F';
+  document.getElementById('gradeBadge').textContent = grade;
+  document.getElementById('resultGrid').innerHTML = `
+    <div class="result-card"><div class="val">${score}/${maxScore}</div><div class="lbl">TOTAL SCORE</div></div>
+    <div class="result-card"><div class="val">${pct}%</div><div class="lbl">PERCENTAGE</div></div>
+    <div class="result-card"><div class="val">${identScore}/${identData.length}</div><div class="lbl">IDENTIFICATION</div></div>
+    <div class="result-card"><div class="val">${mcScore}/${mcData.length}</div><div class="lbl">MULTIPLE CHOICE</div></div>
+    <div class="result-card"><div class="val">${tfScore}/${tfData.length}</div><div class="lbl">TRUE / FALSE</div></div>
+    <div class="result-card"><div class="val">${matchScore}/${matchData.length}</div><div class="lbl">MATCHING</div></div>
+  `;
+  document.getElementById('resultsDisplay').classList.add('show');
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('progressBar').style.width = '100%';
+}
+
+function resetExam() {
+  if (!confirm('Reset all answers?')) return;
+  location.reload();
+}
+
+// ─────────────────── INIT ───────────────────
+buildIdent();
+buildMC();
+buildTF();
+buildMatch();
+</script>
 </body>
 </html>
